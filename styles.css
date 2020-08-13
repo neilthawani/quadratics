@@ -1,0 +1,35 @@
+/* variables */
+:root {
+    --textColor: rgb(102, 102, 102);
+    --fontFamily: "Source Sans Pro", Helvetica, sans-serif;
+    --fontSize: 18px;
+    --lineHeight: 1.7; // 30.6px;
+    --wordSpacing: 0.05em;
+    --red: #cd0e66;
+    --orange: #F6700F;
+    --yellow: #fd8c00;
+    --green: #22ab24;
+    --blue: #0f82f2;
+}
+
+.heading {
+    color: rgb(51, 51, 51);
+    border-bottom-color: rgb(221, 221, 221);
+    border-bottom-style: solid;
+    border-bottom-width: 2px;
+    font-family: var(--fontFamily);
+    font-size: 28.8px;
+    font-weight: 600;
+    line-height: 1.15; // 33.12px;
+    margin-bottom: 28.8px;
+    word-spacing: var(--wordSpacing);
+}
+
+.sentence {
+    display: block;
+    color: var(--textColor);
+    font-family: var(--fontFamily);
+    font-size: var(--fontSize);
+    line-height: var(--lineHeight);
+    word-spacing: var(--wordSpacing);
+}
