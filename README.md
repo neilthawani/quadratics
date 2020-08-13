@@ -1,8 +1,8 @@
 ### Quadratics - Projectile Motion
 
-This is a demo built for Mathigon, the textbook of the future.
+This is a demo built for [Mathigon](https://mathigon.org/course/quadratics/introduction), the textbook of the future.
 
-To run the demo from your Terminal, type:
+To run this demo from your Terminal, type:
 
 ```
 python -m http.server
