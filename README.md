@@ -14,4 +14,4 @@ to install its dependencies and then run:
 npm start
 ```
 
-Then go to [localhost:8080](localhost:8080) in your browser.
+Then go to [localhost:8080](http://localhost:8080) in your browser.
