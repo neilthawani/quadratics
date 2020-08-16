@@ -16,7 +16,7 @@ var params = {
 // `watch-css` from the terminal manually. It should be ok then.
 
 // Upon blog post creation, run `npm run build-md`.
-childProcess.exec("node node_modules/typescript/lib/tsc.js --target ES5 scripts.ts && python -m http.server", {
+childProcess.exec("node node_modules/typescript/lib/tsc.js --target ES5 assets/scripts.ts && python -m http.server", {
         "shell": true
     },
     (error, stdout, stderr) => {
