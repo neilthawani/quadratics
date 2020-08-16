@@ -28,7 +28,9 @@
     "@types/react-dom": "16.0.7",
     "@types/topojson": "3.2.2",
     "bezier-js": "^2.6.1",
+    "browserify": "^16.5.2",
     "live-server": "^1.2.1",
+    "requirejs": "^2.3.6",
     "three": "0.119.1",
     "typescript": "3.9.7"
   },

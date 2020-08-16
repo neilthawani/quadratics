@@ -20,6 +20,7 @@ var fermat_1 = require("@mathigon/fermat");
 // Design patterns: https://tony-scialo.github.io/react-typescript-slides/#/41
 // content/quadratics/function.ts
 function zeros(a, b, c) {
+    console.log("here");
     var disc = b * b - 4 * a * c;
     if (disc < 0)
         return [];

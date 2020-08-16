@@ -1,5 +1,6 @@
 import {nearlyEquals, Point} from '@mathigon/fermat';
 // import * as Functions from './functions';
+
 // TypeScript Reference: https://tony-scialo.github.io/react-typescript-slides/
 // boolean, number, string, array, any
 // void, null, undefined, Object
@@ -19,6 +20,7 @@ import {nearlyEquals, Point} from '@mathigon/fermat';
 
 // content/quadratics/function.ts
 function zeros(a: number, b: number, c: number) {
+  console.log("here");
   const disc = b * b - 4 * a * c;
   if (disc < 0) return [];
 
