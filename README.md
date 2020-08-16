@@ -5,7 +5,13 @@ This is a demo built for [Mathigon](https://mathigon.org/course/quadratics/intro
 To run this demo from your Terminal, type:
 
 ```
-python -m http.server
+npm install
 ```
 
-And go to `localhost:8000` in your browser.
+to install its dependencies and then run:
+
+```
+npm start
+```
+
+Then go to `localhost:8000` in your browser.
