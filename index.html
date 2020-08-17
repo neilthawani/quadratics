@@ -42,23 +42,9 @@
   </body>
 </html>
 
-Pull back on slingshot.
-Dynamically draw line between x,y point on slingshot and mouse point.
-Draw dotted-line curve from mouse to estimated landing point.
-When user stops holding onto bird-ball, send bird along bezier curve to landing point.
-
-<!-- imagine we're working on a course with quadratic equations
-slingshot - pull and the slingshot follows a trajectory
-build a quick prototype - don't worry about the graphics - circle/square the bird, line as the slingshot
-event and gesture handling - how do you detect the pull gesture
-how do you animate things flying through the air
-how do you render graphics - canvas, svg, d3
-use react, angular, etc if you want
-you can use the mathigon libraries
-fermat or the other -->
-
-<!-- slingshot - two states: initial and pulled
-initial state is upright slingshot
-pulled state sets bird to "isDragging"
-Draggable interface on bird
-bird's trajectory is traced with dots along a coordinate plane -->
+<ol>
+  <li>Pull back on slingshot. Detect the pull gesture.</li>
+  <li>Dynamically draw line between x,y point on slingshot and mouse point.</li>
+  <li>Draw dotted-line curve from mouse to estimated landing point.</li>
+  <li>When user stops holding onto bird-ball, send bird along bezier curve to landing point. Rotate the color of the ball as it's flying through the air.</li>
+</ol>
