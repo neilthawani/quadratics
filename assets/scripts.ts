@@ -7,22 +7,18 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) {
     var birdGroup = document.getElementById("gc-bird"),
         bird = birdGroup.children[1],
         isDragging = false;
-    // debugger;
+
     let initialX = bird.getAttribute("cx"),
         initialY = bird.getAttribute("cy");
 
-    // bird.addEventListener("click", function(event) {
-    //     console.log("birb");
-    // });
-
     bird.addEventListener("mousedown", function(event: MouseEvent) {
-        console.log("mousedown");
+        // console.log("mousedown");
         event.preventDefault();
         isDragging = isDragging ? false : true;
     });
 
     bird.addEventListener("mousemove", function(event: MouseEvent) {
-        console.log("mousemove");
+        // console.log("mousemove");
         if (!isDragging) {
             return;
         }
@@ -31,8 +27,8 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) {
 
         var x = event.offsetX,
             y = event.offsetY;
+        // console.log(x, y);
 
-        console.log(x, y);
         if (x > xMin && x < xMax) {
           this.setAttribute("cx", x.toString());
         }
@@ -43,7 +39,7 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) {
     });
 
     bird.addEventListener("mouseup", function(event: MouseEvent) {
-        console.log("mouseup");
+        // console.log("mouseup");
         event.preventDefault();
 
         this.setAttribute("cx", initialX);
