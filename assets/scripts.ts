@@ -82,14 +82,14 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
     });
 });
 
-function resetSpritePositions(context, rubberbandEl, x, y) {
+function resetSpritePositions(context: Element, rubberbandEl: Element, x: string, y: string) {
     context.setAttribute("cx", x);
     context.setAttribute("cy", y);
 
     resetRubberbandPosition(rubberbandEl);
 }
 
-function resetRubberbandPosition(rubberbandEl) {
+function resetRubberbandPosition(rubberbandEl: Element) {
     rubberbandEl.setAttribute("x2", rubberbandEl.getAttribute("x1"));
     rubberbandEl.setAttribute("y2", rubberbandEl.getAttribute("y1"));
 }
