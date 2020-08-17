@@ -1,4 +1,4 @@
-### Quadratics - Projectile Motion
+## Quadratics - Projectile Motion
 
 This is a demo built for [Mathigon](https://mathigon.org/course/quadratics/introduction), the textbook of the future.
 
@@ -16,9 +16,9 @@ npm start
 
 to start the app at [localhost:8080](http://localhost:8080) in your browser.
 
-#### TypeScript
+### TypeScript
 
-It should already have a bundle.js file in this repository, but you can run:
+This repository should already have a bundle.js file in it, but you can run:
 
 ```
 npm run build
