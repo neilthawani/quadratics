@@ -35,16 +35,31 @@
     use react, angular, etc if you want
     you can use the mathigon libraries
     fermat or the other -->
-    slingshot - two states: initial and pulled
+
+    <!-- slingshot - two states: initial and pulled
     initial state is upright slingshot
     pulled state sets bird to "isDragging"
     Draggable interface on bird
-    bird's trajectory is traced with dots along a coordinate plane
+    bird's trajectory is traced with dots along a coordinate plane -->
 
-    <svg xmlns="http://www.w3.org/2000/svg" width="1024" height="480" viewBox="0 0 1024 480" onclick="zeros(12, 12, 12)">
-      <title>triangle-1</title>
-      <circle cx="212" cy="212" r="12" fill="#ff941f"/>
+    <svg xmlns="http://www.w3.org/2000/svg" width="1024" height="300" viewBox="0 0 1024 300">
+      <g id="slingshot"> <!-- source: https://editor.method.ac/ -->
+       <title>Slingshot</title>
+       <path fill="#fff" stroke="#000" stroke-width="1.5" stroke-opacity="null" fill-opacity="null" d="m42.5,218.20313l11.5,-0.45313l9,51l15,-1l4,-57l11,0l-5,63l-7,8l0,50l-10,1l-3,-48l-13,-3l-12.5,-63.54688l0,0.00001z" />
+      </g>
+      <g id="bird">
+        <title>Bird</title>
+        <circle id="bird" cx="70" cy="240" r="12" fill="#ff941f"/>
+      </g>
     </svg>
-
   </body>
 </html>
+
+<!-- <svg width="500" height="250">
+  <defs>
+    <clipPath id="circleView">
+      <circle cx="250" cy="125" r="125" fill="#FFFFFF" />
+    </clipPath>
+  </defs>
+  <image width="500" height="250" xlink:href="https://www.amrita.edu/sites/default/files/news-images/new/news-events/images/l-nov/grass.jpg" clip-path="url(#circleView)" />
+ </svg> -->

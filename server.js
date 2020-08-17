@@ -9,24 +9,6 @@ var params = {
 	logLevel: 2
 };
 
-// NOTE: If CSS doesn't build,
-// this will fail silently if you have typos in your SASS.
-// Run `npm run build-css` to test and the console will show an error if this is the case.
-// Sometimes, if build works but watch doesn't, you will have to run
-// `watch-css` from the terminal manually. It should be ok then.
-
-// Upon blog post creation, run `npm run build-md`.
-childProcess.exec("node node_modules/typescript/lib/tsc.js --target ES5 assets/scripts.ts && browserify assets/scripts.js > assets/bundle.js && python -m http.server", {
-        "shell": true
-    },
-    (error, stdout, stderr) => {
-        console.log(`stdout: ${stdout}`);
-        console.log(`stderr: ${stderr}`);
-        if (error !== null) {
-            console.log(`exec error: ${error}`);
-        }
-});
-
 liveServer.start(params);
 
 /*

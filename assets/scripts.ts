@@ -1,3 +1,13 @@
+
+
+document.addEventListener("DOMContentLoaded", function(event) {
+    var bird = document.getElementById("bird");
+
+    bird.addEventListener("click", function() {
+        console.log("birb");
+    });
+});
+
 import {nearlyEquals, Point} from '@mathigon/fermat';
 // import * as Functions from './functions';
 
@@ -31,8 +41,38 @@ function zeros(a: number, b: number, c: number) {
   return [x1, x2];
 }
 
-// function bezier()
 
-module.exports = {
-    zeros: zeros
-};
+
+    // var Raphael = require("raphael");
+    // var R = Raphael(10, 10, 400, 400);
+    //
+    // var l = R.path("M100 200L200 200L300 200");
+    // l.attr({
+    //     stroke: 'red',
+    //     'stroke-width': 4
+    // });
+    //
+    // var c = R.circle(200, 200, 10).attr({
+    //     fill: 'white',
+    //     stroke: 'red',
+    //     'stroke-width': 4
+    // });
+    //
+    // function move(dx, dy) {
+    //     var x = 200 + dx, y = 200 + dy;
+    //     this.attr({cx: x, cy: y});
+    //     l.attr({path: "M100 200L"+x+" "+y+"L300 200"});
+    // }
+    // function start() {
+    //     c.stop();
+    //     l.stop();
+    // }
+    // function end() {
+    //     this.animate({cx: 200, cy: 200}, 2000, "elastic");
+    //     l.animate({path: "M100 200L200 200L300 200"},
+    //              2000, "elastic");
+    // }
+    // c.drag(move, start, end);
+    //
+    // // Example by http://stackoverflow.com/users/613198/rsp
+    // // for http://stackoverflow.com/questions/5335728
