@@ -26,28 +26,15 @@
       Experiment with the slingshot below and see how far you can make these birds fly.
     </span>
 
-    <!-- imagine we're working on a course with quadratic equations
-    slingshot - pull and the slingshot follows a trajectory
-    build a quick prototype - don't worry about the graphics - circle/square the bird, line as the slingshot
-    event and gesture handling - how do you detect the pull gesture
-    how do you animate things flying through the air
-    how do you render graphics - canvas, svg, d3
-    use react, angular, etc if you want
-    you can use the mathigon libraries
-    fermat or the other -->
-
-    <!-- slingshot - two states: initial and pulled
-    initial state is upright slingshot
-    pulled state sets bird to "isDragging"
-    Draggable interface on bird
-    bird's trajectory is traced with dots along a coordinate plane -->
-
-    <svg xmlns="http://www.w3.org/2000/svg" width="1024" height="300" viewBox="0 0 1024 300">
-      <g id="slingshot"> <!-- source: https://editor.method.ac/ -->
+    <svg id="game-canvas" xmlns="http://www.w3.org/2000/svg" width="1240" height="300" viewBox="0 0 1240 300">
+      <g id="gc-ground">
+        <rect x=0 y=275 width=1240 height=25 />
+      </g>
+      <g id="gc-slingshot"> <!-- source: https://editor.method.ac/ -->
        <title>Slingshot</title>
        <path fill="#fff" stroke="#000" stroke-width="1.5" stroke-opacity="null" fill-opacity="null" d="m42.5,218.20313l11.5,-0.45313l9,51l15,-1l4,-57l11,0l-5,63l-7,8l0,50l-10,1l-3,-48l-13,-3l-12.5,-63.54688l0,0.00001z" />
       </g>
-      <g id="bird">
+      <g id="gc-bird">
         <title>Bird</title>
         <circle id="bird" cx="70" cy="240" r="12" fill="#ff941f"/>
       </g>
@@ -55,11 +42,23 @@
   </body>
 </html>
 
-<!-- <svg width="500" height="250">
-  <defs>
-    <clipPath id="circleView">
-      <circle cx="250" cy="125" r="125" fill="#FFFFFF" />
-    </clipPath>
-  </defs>
-  <image width="500" height="250" xlink:href="https://www.amrita.edu/sites/default/files/news-images/new/news-events/images/l-nov/grass.jpg" clip-path="url(#circleView)" />
- </svg> -->
+Pull back on slingshot.
+Dynamically draw line between x,y point on slingshot and mouse point.
+Draw dotted-line curve from mouse to estimated landing point.
+When user stops holding onto bird-ball, send bird along bezier curve to landing point.
+
+<!-- imagine we're working on a course with quadratic equations
+slingshot - pull and the slingshot follows a trajectory
+build a quick prototype - don't worry about the graphics - circle/square the bird, line as the slingshot
+event and gesture handling - how do you detect the pull gesture
+how do you animate things flying through the air
+how do you render graphics - canvas, svg, d3
+use react, angular, etc if you want
+you can use the mathigon libraries
+fermat or the other -->
+
+<!-- slingshot - two states: initial and pulled
+initial state is upright slingshot
+pulled state sets bird to "isDragging"
+Draggable interface on bird
+bird's trajectory is traced with dots along a coordinate plane -->

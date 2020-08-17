@@ -12,6 +12,10 @@
     --blue: #0f82f2;
 }
 
+body {
+    max-width: 1240px;
+}
+
 .heading {
     color: rgb(51, 51, 51);
     border-bottom-color: rgb(221, 221, 221);
@@ -32,4 +36,9 @@
     font-size: var(--fontSize);
     line-height: var(--lineHeight);
     word-spacing: var(--wordSpacing);
+}
+
+#gc-ground rect {
+    fill: green;
+    stroke: #0f0;
 }
