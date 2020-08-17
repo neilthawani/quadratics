@@ -50,7 +50,8 @@ body {
 }
 
 #gc-rubberband line {
-    stroke: green;
+    stroke: var(--red);
+    stroke-width: 4px;
 }
 
 #gc-bird circle {

@@ -1,15 +1,23 @@
 const xMin = 0;
-const xMax = 90;
+const xMax = 158; // cx + 20
 const yMin = 0;
 const yMax = 300;
 
 document.addEventListener("DOMContentLoaded", function(event: MouseEvent) {
+    var svg = document.getElementById("game-canvas");
+
     var birdGroup = document.getElementById("gc-bird"),
         bird = birdGroup.children[1],
         isDragging = false;
 
+    const rubberbandEl = document.querySelector("#gc-rubberband line");
+
     let initialX = bird.getAttribute("cx"),
         initialY = bird.getAttribute("cy");
+
+    svg.addEventListener("click", function(event: MouseEvent) {
+        resetSpritePositions(bird, rubberbandEl, initialX, initialY);
+    });
 
     bird.addEventListener("mousedown", function(event: MouseEvent) {
         // console.log("mousedown");
@@ -28,17 +36,21 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) {
         var x = event.offsetX,
             y = event.offsetY;
         // console.log(x, y);
+        // debugger;
 
         if (x > xMin && x < xMax) {
             this.setAttribute("cx", x.toString());
+            // debugger;
+            rubberbandEl.setAttribute("x2", x.toString())
         } else if (x < xMin || x > xMax) {
-            resetBirdPosition(this, initialX, initialY);
+            resetSpritePositions(this, rubberbandEl, initialX, initialY);
         }
 
         if (y > yMin && y < yMax) {
             this.setAttribute("cy", y.toString());
+            rubberbandEl.setAttribute("y2", y.toString());
         } else if (y < yMin || y > yMax) {
-            resetBirdPosition(this, initialX, initialY);
+            resetSpritePositions(this, rubberbandEl, initialX, initialY);
         }
     });
 
@@ -46,15 +58,22 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) {
         // console.log("mouseup");
         event.preventDefault();
 
-        resetBirdPosition(this, initialX, initialY);
+        resetSpritePositions(this, rubberbandEl, initialX, initialY);
 
         isDragging = false;
     });
 });
 
-function resetBirdPosition(context, x, y) {
+function resetSpritePositions(context, rubberbandEl, x, y) {
     context.setAttribute("cx", x);
     context.setAttribute("cy", y);
+
+    resetRubberbandPosition(rubberbandEl);
+}
+
+function resetRubberbandPosition(rubberbandEl) {
+    rubberbandEl.setAttribute("x2", rubberbandEl.getAttribute("x1"));
+    rubberbandEl.setAttribute("y2", rubberbandEl.getAttribute("y1"));
 }
 
 function cutCurve() {
