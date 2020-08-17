@@ -1,12 +1,57 @@
+const xMin = 0;
+const xMax = 90;
+const yMin = 0;
+const yMax = 300;
 
+document.addEventListener("DOMContentLoaded", function(event: MouseEvent) {
+    var birdGroup = document.getElementById("gc-bird"),
+        bird = birdGroup.children[1];
+    // debugger;
+    let initialX = bird.getAttribute("cx"),
+        initialY = bird.getAttribute("cy");
 
-document.addEventListener("DOMContentLoaded", function(event) {
-    var bird = document.getElementById("bird");
+    // bird.addEventListener("click", function(event) {
+    //     console.log("birb");
+    // });
 
-    bird.addEventListener("click", function() {
-        console.log("birb");
+    bird.addEventListener("mousedown", function(event: MouseEvent) {
+        console.log("mousedown");
+
+        this.addEventListener("mousemove", function(event: MouseEvent) {
+            // event.preventDefault();
+            // console.log("mousemove");
+            // debugger;
+            var x = event.offsetX,
+                y = event.offsetY;
+
+            console.log(x, y);
+            if (x > xMin && x < xMax) {
+              this.setAttribute("cx", x.toString());
+            }
+
+            if (y > yMin && y < yMax) {
+                this.setAttribute("cy", y.toString());
+            }
+
+            // if (x > xMax) {
+            //     console.log("xMax reached");
+            //     this.setAttribute("cx", initialX);
+            //     this.setAttribute("cy", initialY);
+            // }
+        });
+
+        this.addEventListener("mouseup", function(event: MouseEvent) {
+            // console.log("mouseup");
+            event.preventDefault();
+            this.setAttribute("cx", initialX);
+            this.setAttribute("cy", initialY);
+        });
     });
 });
+
+function cutCurve() {
+    console.log("cutCurve");
+}
 
 import {nearlyEquals, Point} from '@mathigon/fermat';
 // import * as Functions from './functions';
