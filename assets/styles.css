@@ -38,15 +38,19 @@ body {
     word-spacing: var(--wordSpacing);
 }
 
+#gc-ground rect {
+    fill: var(--green);
+    stroke-width: 2px;
+}
+
 #gc-slingshot path {
     fill: var(--yellow);
     stroke: var(--orange);
     stroke-width: 1.5;
 }
 
-#gc-ground rect {
-    fill: var(--green);
-    stroke-width: 2px;
+#gc-rubberband line {
+    stroke: green;
 }
 
 #gc-bird circle {
