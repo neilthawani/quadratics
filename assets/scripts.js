@@ -5,38 +5,40 @@ var xMax = 90;
 var yMin = 0;
 var yMax = 300;
 document.addEventListener("DOMContentLoaded", function (event) {
-    var birdGroup = document.getElementById("gc-bird"), bird = birdGroup.children[1];
+    var birdGroup = document.getElementById("gc-bird"), bird = birdGroup.children[1], isDragging = false;
     // debugger;
     var initialX = bird.getAttribute("cx"), initialY = bird.getAttribute("cy");
     // bird.addEventListener("click", function(event) {
     //     console.log("birb");
     // });
     bird.addEventListener("mousedown", function (event) {
+        event.preventDefault();
         console.log("mousedown");
-        this.addEventListener("mousemove", function (event) {
-            event.preventDefault();
-            // console.log("mousemove");
-            // debugger;
-            var x = event.offsetX, y = event.offsetY;
-            console.log(x, y);
-            if (x > xMin && x < xMax) {
-                this.setAttribute("cx", x.toString());
-            }
-            if (y > yMin && y < yMax) {
-                this.setAttribute("cy", y.toString());
-            }
-            // if (x > xMax) {
-            //     console.log("xMax reached");
-            //     this.setAttribute("cx", initialX);
-            //     this.setAttribute("cy", initialY);
-            // }
-        });
-        this.addEventListener("mouseup", function (event) {
-            console.log("mouseup");
-            event.preventDefault();
-            this.setAttribute("cx", initialX);
-            this.setAttribute("cy", initialY);
-        });
+        // debugger;
+        isDragging = isDragging ? false : true;
+    });
+    bird.addEventListener("mousemove", function (event) {
+        if (!isDragging) {
+            return;
+        }
+        event.preventDefault();
+        console.log("mousemove");
+        // debugger;
+        var x = event.offsetX, y = event.offsetY;
+        console.log(x, y);
+        if (x > xMin && x < xMax) {
+            this.setAttribute("cx", x.toString());
+        }
+        if (y > yMin && y < yMax) {
+            this.setAttribute("cy", y.toString());
+        }
+    });
+    bird.addEventListener("mouseup", function (event) {
+        console.log("mouseup");
+        event.preventDefault();
+        this.setAttribute("cx", initialX);
+        this.setAttribute("cy", initialY);
+        isDragging = false;
     });
 });
 function cutCurve() {

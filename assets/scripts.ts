@@ -5,7 +5,8 @@ const yMax = 300;
 
 document.addEventListener("DOMContentLoaded", function(event: MouseEvent) {
     var birdGroup = document.getElementById("gc-bird"),
-        bird = birdGroup.children[1];
+        bird = birdGroup.children[1],
+        isDragging = false;
     // debugger;
     let initialX = bird.getAttribute("cx"),
         initialY = bird.getAttribute("cy");
@@ -16,36 +17,39 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) {
 
     bird.addEventListener("mousedown", function(event: MouseEvent) {
         console.log("mousedown");
+        event.preventDefault();
+        isDragging = isDragging ? false : true;
+    });
 
-        this.addEventListener("mousemove", function(event: MouseEvent) {
-            // event.preventDefault();
-            // console.log("mousemove");
-            // debugger;
-            var x = event.offsetX,
-                y = event.offsetY;
+    bird.addEventListener("mousemove", function(event: MouseEvent) {
+        console.log("mousemove");
+        if (!isDragging) {
+            return;
+        }
 
-            console.log(x, y);
-            if (x > xMin && x < xMax) {
-              this.setAttribute("cx", x.toString());
-            }
+        event.preventDefault();
 
-            if (y > yMin && y < yMax) {
-                this.setAttribute("cy", y.toString());
-            }
+        var x = event.offsetX,
+            y = event.offsetY;
 
-            // if (x > xMax) {
-            //     console.log("xMax reached");
-            //     this.setAttribute("cx", initialX);
-            //     this.setAttribute("cy", initialY);
-            // }
-        });
+        console.log(x, y);
+        if (x > xMin && x < xMax) {
+          this.setAttribute("cx", x.toString());
+        }
 
-        this.addEventListener("mouseup", function(event: MouseEvent) {
-            // console.log("mouseup");
-            event.preventDefault();
-            this.setAttribute("cx", initialX);
-            this.setAttribute("cy", initialY);
-        });
+        if (y > yMin && y < yMax) {
+            this.setAttribute("cy", y.toString());
+        }
+    });
+
+    bird.addEventListener("mouseup", function(event: MouseEvent) {
+        console.log("mouseup");
+        event.preventDefault();
+
+        this.setAttribute("cx", initialX);
+        this.setAttribute("cy", initialY);
+
+        isDragging = false;
     });
 });
 
