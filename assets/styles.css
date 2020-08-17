@@ -41,4 +41,5 @@ body {
 #gc-ground rect {
     fill: green;
     stroke: #0f0;
+    stroke-width: 2px;
 }
