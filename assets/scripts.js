@@ -6,41 +6,44 @@ var yMin = 0;
 var yMax = 300;
 document.addEventListener("DOMContentLoaded", function (event) {
     var birdGroup = document.getElementById("gc-bird"), bird = birdGroup.children[1], isDragging = false;
-    // debugger;
     var initialX = bird.getAttribute("cx"), initialY = bird.getAttribute("cy");
-    // bird.addEventListener("click", function(event) {
-    //     console.log("birb");
-    // });
     bird.addEventListener("mousedown", function (event) {
+        // console.log("mousedown");
         event.preventDefault();
-        console.log("mousedown");
-        // debugger;
         isDragging = isDragging ? false : true;
     });
     bird.addEventListener("mousemove", function (event) {
+        // console.log("mousemove");
         if (!isDragging) {
             return;
         }
         event.preventDefault();
-        console.log("mousemove");
-        // debugger;
         var x = event.offsetX, y = event.offsetY;
-        console.log(x, y);
+        // console.log(x, y);
         if (x > xMin && x < xMax) {
             this.setAttribute("cx", x.toString());
+        }
+        else if (x < xMin || x > xMax) {
+            resetBirdPosition(this, initialX, initialY);
         }
         if (y > yMin && y < yMax) {
             this.setAttribute("cy", y.toString());
         }
+        else if (y < yMin || y > yMax) {
+            resetBirdPosition(this, initialX, initialY);
+        }
     });
     bird.addEventListener("mouseup", function (event) {
-        console.log("mouseup");
+        // console.log("mouseup");
         event.preventDefault();
-        this.setAttribute("cx", initialX);
-        this.setAttribute("cy", initialY);
+        resetBirdPosition(this, initialX, initialY);
         isDragging = false;
     });
 });
+function resetBirdPosition(context, x, y) {
+    context.setAttribute("cx", x);
+    context.setAttribute("cy", y);
+}
 function cutCurve() {
     console.log("cutCurve");
 }
