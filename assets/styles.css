@@ -39,7 +39,7 @@ body {
     word-spacing: var(--wordSpacing);
 }
 
-.sentence.hidden {
+.sentence.scaffold.hidden {
     display: none;
 }
 

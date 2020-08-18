@@ -115,11 +115,14 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
 
     // let the bird fly
     svg.addEventListener("click", function(event: MouseEvent) {
+        console.log("click");
+
         if (!isDragging) {
             return;
         }
+
         event.preventDefault();
-        console.log("click");
+
         var pathLength = trajectoryEl.getTotalLength();
         var pathPoints = [];
         for (var i = 0; i < Math.floor(pathLength); i++) {
@@ -134,17 +137,9 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
             }, 1000);
             pathPoints.push([svgX, svgY]);
         }
-        // console.log("pathPoints", pathPoints);
-        // debugger;
-        // for (var i = 0; i < pathPoints.length; i++) {
-        //     var coords = pathPoints[i];
-            // console.log("coords", coords);
-            // setTimeout(function() {
-            //     console.log("pathPoints[i][0]", pathPoints[i][0], "pathPoints[i][1]", pathPoints[i][1]);
-            //     bird.setAttribute("cx", pathPoints[i][0]);
-            //     bird.setAttribute("cy", pathPoints[i][1]);
-            // }, 500);
-        // }
+
+        var scaffoldSentence = document.getElementsByClassName("scaffold");
+        scaffoldSentence[0].removeClass("hidden");
     });
 });
 
