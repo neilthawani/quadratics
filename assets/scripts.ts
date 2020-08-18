@@ -15,6 +15,10 @@
 //
 // Design patterns: https://tony-scialo.github.io/react-typescript-slides/#/41
 
+// interface SVGElement extends Element {
+//     getTotalLength(): SVGElement;
+// }
+
 // mouse range of motion
 const xMin = 0;
 const xMax = 158; // gc-bird-obj:cx + 20
@@ -120,6 +124,19 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
         }
         event.preventDefault();
         console.log("click");
+        // var pathLength = trajectoryEl.getTotalLength();
+        // var pathPoints = [];
+        // for (var i = 0; i < Math.floor(pathLength); i++) {
+        //     var coords = pathLength.getPointAtLength(i);
+        //     pathPoints.push([coords["x"], coords["y"]])
+        // }
+        //
+        // for (var i = 0; i < pathPoints.length; i++) {
+        //     setTimeout(function() {
+        //       bird.setAttribute("cx", pathPoints[0]);
+        //       bird.setAttribute("cy", pathPoints[1]);
+        //     }, 500);
+        // }
     });
 });
 

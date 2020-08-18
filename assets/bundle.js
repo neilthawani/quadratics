@@ -106,6 +106,7 @@ function findThirdPoint(x0, y0, x1, y1, x2, y2) {
     }
     var x2 = x2 || ((y2 - y0) * (x1 - x0)) / (y1 - y0) + x0;
     var y2 = y2 || ((y1 - y0) / (x1 - x0)) * (x2 - x0) + y0;
+    console.log("x2", x2, "y2", y2);
     return [x2, y2];
 }
 function findThirdX(x0, y0, x1, y1, y2) {
@@ -114,6 +115,7 @@ function findThirdX(x0, y0, x1, y1, y2) {
         return;
     }
     var x2 = ((y2 - y0) * (x1 - x0)) / (y1 - y0) + x0;
+    console.log("x22", x2, "y22", y2);
     return x2;
 }
 

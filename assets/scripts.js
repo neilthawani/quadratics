@@ -81,6 +81,18 @@ document.addEventListener("DOMContentLoaded", function (event) {
         }
         event.preventDefault();
         console.log("click");
+        var pathLength = trajectoryEl.getTotalLength();
+        var pathPoints = [];
+        for (var i = 0; i < Math.floor(pathLength); i++) {
+            var coords = pathLength.getPointAtLength(i);
+            pathPoints.push([coords["x"], coords["y"]]);
+        }
+        for (var i = 0; i < pathPoints.length; i++) {
+            setTimeout(function () {
+                bird.setAttribute("cx", pathPoints[0]);
+                bird.setAttribute("cy", pathPoints[1]);
+            }, 500);
+        }
     });
 });
 function resetSpritePosition(el, x, y) {
