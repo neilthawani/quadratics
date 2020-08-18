@@ -17,20 +17,6 @@
 //
 // Design patterns: https://tony-scialo.github.io/react-typescript-slides/#/41
 
-// [{
-//     element: bird,
-//     attributes: ["cx", "cy"]
-// }, {
-//     element: rubberbandEl,
-//     attributes: [{
-//         "x2": rubberbandEl.getAttribute("x1"),
-//         "y2": rubberbandEl.getAttribute("y1")
-//     }]
-// }, {
-//     element: trajectoryEl,
-//     attributes: ["x0", "y0", "x1", "y1", "x2", "y2"]
-// }]
-
 const xMin = 0;
 const xMax = 158; // gc-bird-obj:cx + 20
 const yMin = 0;
@@ -52,31 +38,23 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
 
     var isDragging = false;
 
-    // reset sprite positions if svg is clicked
-    svg.addEventListener("click", function(event: MouseEvent) {
-        isDragging = false;
-        resetSpritePosition(bird, {"cx": initialX}, {"cy": initialY});
-        resetSpritePosition(rubberbandEl, {"x2": rubberbandEl.getAttribute("x1")}, {"y2": rubberbandEl.getAttribute("y1")})
-        drawCurve(trajectoryEl, 0, 0, 0, 0, 0, 0);
-    });
-
     // toggle bird/slingshot drag event on mousedown/mouseup
     bird.addEventListener("mousedown", function(event: MouseEvent) {
-        // console.log("mousedown");
         event.preventDefault();
         isDragging = true;
     });
 
     // reset sprite positions on mouseup
     bird.addEventListener("mouseup", function(event: MouseEvent) {
-        // console.log("mouseup");
         event.preventDefault();
-        svg.dispatchEvent(new Event("click"));
+        isDragging = false;
+        resetSpritePosition(bird, {"cx": initialX}, {"cy": initialY});
+        resetSpritePosition(rubberbandEl, {"x2": rubberbandEl.getAttribute("x1")}, {"y2": rubberbandEl.getAttribute("y1")})
+        drawCurve(trajectoryEl, 0, 0, 0, 0, 0, 0);
     });
 
     // main slingshot dragging logic
     bird.addEventListener("mousemove", function(event: MouseEvent) {
-        // console.log("mousemove", "isDragging", isDragging);
         if (!isDragging) {
             return;
         }
@@ -101,6 +79,8 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
 
             var x0 = x,
                 y0 = y,
+                // get angle difference between coords of ball (x, y)
+                // and coords of rubberbandEl (parseInt(rubberbandEl.getAttribute("x2"), 10), parseInt(rubberbandEl.getAttribute("y2"), 10))
                 x1 = parseInt(rubberbandEl.getAttribute("x1"), 10),
                 y1 = parseInt(rubberbandEl.getAttribute("y2"), 10) - parseInt(rubberbandEl.getAttribute("y1"), 10),
                 x2 = parseInt(svgWidth, 10) - x,
@@ -111,8 +91,32 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
               x1, y1,
               x2, y2);
         } else {
-            svg.dispatchEvent(new Event("click"));
+            bird.dispatchEvent(new Event("mouseup"));
         }
+    });
+
+    // let the bird fly
+    svg.addEventListener("click", function(event: MouseEvent) {
+        if (!isDragging) {
+            return;
+        }
+        event.preventDefault();
+        console.log("click");
+
+        // var birdGroup = document.getElementById("gc-bird"),
+        //     rubberbandGroup = document.querySelector("#gc-rubberband"),
+        //     trajectoryEl = document.querySelector("#gc-trajectory path");
+        //
+        // birdGroup.classList.add("hidden");
+        // rubberbandGroup.classList.add("hidden");
+        //
+        // var bird = <HTMLElement>document.getElementsByClassName("animated-bird")[0];
+        // debugger;
+        // bird.style['offsetPath'] = trajectoryEl.getAttribute("d");
+        // debugger;
+        // bird.classList.remove("hidden");
+        // debugger;
+
     });
 });
 

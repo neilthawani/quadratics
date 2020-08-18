@@ -16,6 +16,14 @@ body {
     max-width: 1240px;
 }
 
+/* svg {
+    position: absolute;
+}
+
+.hidden {
+    display: none;
+} */
+
 .heading {
     color: rgb(51, 51, 51);
     border-bottom-color: rgb(221, 221, 221);
@@ -67,3 +75,24 @@ body {
     fill: none;
     stroke-dasharray: 2 2 6 6;
 }
+
+/* .animated-bird {
+    width: 24px;
+    height: 24px;
+    background-color: var(--red);
+    border: 1px solid var(--orange);
+    border-radius: 50%;
+    offset-distance: 0%;
+
+    animation: red-ball 2s linear;
+    animation-fill-mode: forwards;
+}
+
+@keyframes red-ball {
+  from {
+    offset-distance: 0%;
+  }
+  to {
+    offset-distance: 100%;
+  }
+} */
