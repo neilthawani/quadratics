@@ -1,3 +1,5 @@
+// var Bezier = require('bezier-js');
+
 // TypeScript Reference: https://tony-scialo.github.io/react-typescript-slides/
 // boolean, number, string, array, any
 // void, null, undefined, Object
@@ -22,7 +24,9 @@ const yMax = 300;
 
 document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // DOM-ready
     // define query selectors, get related attributes
-    var svg = document.getElementById("game-canvas");
+    var svg = document.getElementById("game-canvas"),
+        svgWidth = svg.getAttribute("width"),
+        svgHeight = svg.getAttribute("height");
 
     var birdGroup = document.getElementById("gc-bird"),
         bird = birdGroup.children[1],
@@ -30,12 +34,13 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
         initialY = bird.getAttribute("cy");
 
     const rubberbandEl = document.querySelector("#gc-rubberband line");
+    const trajectoryEl = document.querySelector("#gc-trajectory path");
 
     var isDragging = false;
 
     // reset sprite positions if svg is clicked
     svg.addEventListener("click", function(event: MouseEvent) {
-        resetSpritePositions(bird, rubberbandEl, initialX, initialY);
+        resetSpritePositions(bird, rubberbandEl, trajectoryEl, initialX, initialY);
     });
 
     // toggle bird/slingshot drag event on mousedown/mouseup
@@ -45,10 +50,9 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
     });
 
     // reset sprite positions on mouseup
-    // TODO: bezier logic probably goes here
     bird.addEventListener("mouseup", function(event: MouseEvent) {
         event.preventDefault();
-        resetSpritePositions(this, rubberbandEl, initialX, initialY);
+        resetSpritePositions(this, rubberbandEl, trajectoryEl, initialX, initialY);
         isDragging = false;
     });
 
@@ -66,27 +70,43 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
 
         // allow player to move the bird within pre-defined (x, y) bounds
         // if the bounds are exceeded, reset the slingshot
-        if (x > xMin && x < xMax) {
-            this.setAttribute("cx", x.toString());
-            rubberbandEl.setAttribute("x2", x.toString())
-        } else if (x < xMin || x > xMax) {
-            resetSpritePositions(this, rubberbandEl, initialX, initialY);
-        }
+        var validXBounds = x > xMin && x < xMax;
+        var validYBounds = y > yMin && y < yMax;
 
-        if (y > yMin && y < yMax) {
+        if (validXBounds && validYBounds) {
+            this.setAttribute("cx", x.toString());
             this.setAttribute("cy", y.toString());
+
+            rubberbandEl.setAttribute("x2", x.toString())
             rubberbandEl.setAttribute("y2", y.toString());
-        } else if (y < yMin || y > yMax) {
-            resetSpritePositions(this, rubberbandEl, initialX, initialY);
+
+            var x0 = x,
+                y0 = y,
+                x1 = parseInt(rubberbandEl.getAttribute("x1"), 10),
+                y1 = parseInt(rubberbandEl.getAttribute("y2"), 10) - parseInt(rubberbandEl.getAttribute("y1"), 10),
+                x2 = parseInt(svgWidth, 10) - x,
+                y2 = y;
+
+            drawCurve(trajectoryEl,
+              x, y,
+              x1, y1,
+              x2, y2);
+        } else {
+            resetSpritePositions(this, rubberbandEl, trajectoryEl, initialX, initialY);
         }
     });
 });
 
-function resetSpritePositions(context: Element, rubberbandEl: Element, x: string, y: string) {
-    context.setAttribute("cx", x);
-    context.setAttribute("cy", y);
+function drawCurve(el, x0, y0, x1, y1, x2, y2) {
+    el.setAttribute("d", `M${x0},${y0} Q${x1},${y1} ${x2},${y2}`);
+}
+
+function resetSpritePositions(bird: Element, rubberbandEl: Element, trajectoryEl: Element, x: string, y: string) {
+    bird.setAttribute("cx", x);
+    bird.setAttribute("cy", y);
 
     resetRubberbandPosition(rubberbandEl);
+    drawCurve(trajectoryEl, 0, 0, 0, 0, 0, 0);
 }
 
 function resetRubberbandPosition(rubberbandEl: Element) {

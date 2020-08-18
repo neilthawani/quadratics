@@ -52,9 +52,18 @@ body {
 #gc-rubberband line {
     stroke: var(--red);
     stroke-width: 4px;
+    stroke-linecap: round;
 }
 
 #gc-bird circle {
     fill: var(--red);
     stroke: var(--orange);
+}
+
+#gc-trajectory path {
+    stroke-width: 2px;
+    stroke: var(--blue);
+    stroke-linecap: round;
+    fill: none;
+    stroke-dasharray: 2 2 6 6;
 }
