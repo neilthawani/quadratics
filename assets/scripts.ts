@@ -17,6 +17,11 @@
 //
 // Design patterns: https://tony-scialo.github.io/react-typescript-slides/#/41
 
+interface UpdateableSVGElement {
+    el: Element,
+    attributes: string[]
+}
+
 const xMin = 0;
 const xMax = 158; // gc-bird-obj:cx + 20
 const yMin = 0;
@@ -40,24 +45,29 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
 
     // reset sprite positions if svg is clicked
     svg.addEventListener("click", function(event: MouseEvent) {
+        isDragging = false;
         resetSpritePositions(bird, rubberbandEl, trajectoryEl, initialX, initialY);
     });
 
     // toggle bird/slingshot drag event on mousedown/mouseup
     bird.addEventListener("mousedown", function(event: MouseEvent) {
+        // console.log("mousedown");
         event.preventDefault();
         isDragging = isDragging ? false : true;
     });
 
     // reset sprite positions on mouseup
     bird.addEventListener("mouseup", function(event: MouseEvent) {
+        // console.log("mouseup");
         event.preventDefault();
+        isDragging = false;
         resetSpritePositions(this, rubberbandEl, trajectoryEl, initialX, initialY);
         isDragging = false;
     });
 
     // main slingshot dragging logic
     bird.addEventListener("mousemove", function(event: MouseEvent) {
+        // console.log("mousemove", "isDragging", isDragging);
         if (!isDragging) {
             return;
         }
@@ -70,8 +80,8 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
 
         // allow player to move the bird within pre-defined (x, y) bounds
         // if the bounds are exceeded, reset the slingshot
-        var validXBounds = x > xMin && x < xMax;
-        var validYBounds = y > yMin && y < yMax;
+        var validXBounds = x > xMin && x < xMax,
+            validYBounds = y > yMin && y < yMax;
 
         if (validXBounds && validYBounds) {
             this.setAttribute("cx", x.toString());
@@ -88,10 +98,11 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
                 y2 = y;
 
             drawCurve(trajectoryEl,
-              x, y,
+              x0, y0,
               x1, y1,
               x2, y2);
         } else {
+            isDragging = false;
             resetSpritePositions(this, rubberbandEl, trajectoryEl, initialX, initialY);
         }
     });
