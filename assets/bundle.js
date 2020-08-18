@@ -60,17 +60,14 @@ document.addEventListener("DOMContentLoaded", function (event) {
             // (x0, y0): ball/mouse coords
             // (x1, y1): trajectory coords, based on slingshot angle
             // (x2, y2): predicted target, tangent to trajectory coords
-            var x0 = x, y0 = y, [x1, y1] = findThirdPoint(x0, y0, parseInt(rubberbandEl.getAttribute("x1"), 10), parseInt(rubberbandEl.getAttribute("y1"), 10));
-            console.log(dot([x0, y0], [x1, y1]));
-            var x2, y2;
-            // downward-facing slingshot
+            var x0 = x, y0 = y, [x1, y1] = findThirdPoint(x0, y0, parseInt(rubberbandEl.getAttribute("x1"), 10), parseInt(rubberbandEl.getAttribute("y1"), 10)), x2, y2;
+            // downward-facing slingshot, draw straight line
             if (y0 < parseInt(rubberbandEl.getAttribute("y1"), 10)) {
                 x2 = x1;
                 y2 = y1;
             }
-            else { // perpendicular 2D vector
-                x2 = 1240;
-                // debugger;
+            else { // upward-facing slingshot, draw arc
+                x2 = parseInt(document.getElementById("gc-ground").children[1].getAttribute("width"), 10);
                 y2 = yMax - parseInt(document.getElementById("gc-ground").children[1].getAttribute("height"), 10);
             }
             drawCurve(trajectoryEl, x0, y0, x1, y1, x2, y2);
@@ -93,16 +90,17 @@ function resetSpritePosition(el, x, y) {
     el.setAttribute(Object.keys(y)[0], Object.values(y)[0]);
 }
 function drawCurve(el, x0, y0, x1, y1, x2, y2) {
-    // downward-facing slingshot
+    // downward-facing slingshot, draw straight line
     if (x1 === x2 && y1 === y2) {
         el.setAttribute("d", `M${x0} ${y0} L${x1} ${y1}`);
         return;
     }
+    // upward-facing slingshot, draw arc
     el.setAttribute("d", `M${x0},${y0} Q${x1},${y1} ${x2},${y2}`);
 }
-function findThirdPoint(x0, y0, x1, y1) {
-    var x2 = 620;
-    var y2 = 0;
+function findThirdPoint(x0, y0, x1, y1, x2, y2) {
+    var x2 = x2 || 620;
+    var y2 = y2 || 0;
     if (x0 === x1) {
         throw new Error("Divide by zero (same input x coords)");
         return;
@@ -110,17 +108,6 @@ function findThirdPoint(x0, y0, x1, y1) {
     var x2 = x2 || ((y2 - y0) * (x1 - x0)) / (y1 - y0) + x0;
     var y2 = y2 || ((y1 - y0) / (x1 - x0)) * (x2 - x0) + y0;
     return [x2, y2];
-}
-function total(array) {
-    return array.reduce((t, v) => t + v, 0);
-}
-function product(v1, v2) {
-    if (v1.length !== v2.length)
-        throw new Error('Mismatched vector sizes.');
-    return v1.map((v, i) => v * v2[i]);
-}
-function dot(v1, v2) {
-    return total(product(v1, v2));
 }
 
 },{}]},{},[1]);
