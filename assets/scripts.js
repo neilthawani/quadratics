@@ -59,15 +59,13 @@ document.addEventListener("DOMContentLoaded", function (event) {
             // (x0, y0): ball/mouse coords
             // (x1, y1): trajectory coords, based on slingshot angle
             // (x2, y2): predicted target, tangent to trajectory coords
-            var x0 = x, y0 = y, [x1, y1] = findThirdPoint(x0, y0, parseInt(rubberbandEl.getAttribute("x1"), 10), parseInt(rubberbandEl.getAttribute("y1"), 10)), x2, y2;
+            var x0 = x, y0 = y, [x1, y1] = findThirdPoint(x0, y0, parseInt(rubberbandEl.getAttribute("x1"), 10), parseInt(rubberbandEl.getAttribute("y1"), 10)), x2 = parseInt(document.getElementById("gc-ground").children[1].getAttribute("width"), 10), y2 = yMax - parseInt(document.getElementById("gc-ground").children[1].getAttribute("height"), 10);
             // downward-facing slingshot, draw straight line
             if (y0 < parseInt(rubberbandEl.getAttribute("y1"), 10)) {
+                y1 = yMax - parseInt(document.getElementById("gc-ground").children[1].getAttribute("height"), 10);
+                x1 = findThirdX(x0, y0, parseInt(rubberbandEl.getAttribute("x1"), 10), parseInt(rubberbandEl.getAttribute("y1"), 10), y1);
                 x2 = x1;
                 y2 = y1;
-            }
-            else { // upward-facing slingshot, draw arc
-                x2 = parseInt(document.getElementById("gc-ground").children[1].getAttribute("width"), 10);
-                y2 = yMax - parseInt(document.getElementById("gc-ground").children[1].getAttribute("height"), 10);
             }
             drawCurve(trajectoryEl, x0, y0, x1, y1, x2, y2);
         }
@@ -107,4 +105,12 @@ function findThirdPoint(x0, y0, x1, y1, x2, y2) {
     var x2 = x2 || ((y2 - y0) * (x1 - x0)) / (y1 - y0) + x0;
     var y2 = y2 || ((y1 - y0) / (x1 - x0)) * (x2 - x0) + y0;
     return [x2, y2];
+}
+function findThirdX(x0, y0, x1, y1, y2) {
+    if (x0 === x1) {
+        throw new Error("Divide by zero (same input x coords)");
+        return;
+    }
+    var x2 = ((y2 - y0) * (x1 - x0)) / (y1 - y0) + x0;
+    return x2;
 }

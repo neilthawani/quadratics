@@ -88,16 +88,19 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
                 [x1, y1] = findThirdPoint(x0,
                                           y0,
                                           parseInt(rubberbandEl.getAttribute("x1"), 10), parseInt(rubberbandEl.getAttribute("y1"), 10)),
-                x2,
-                y2;
+                x2 = parseInt(document.getElementById("gc-ground").children[1].getAttribute("width"), 10),
+                y2 = yMax - parseInt(document.getElementById("gc-ground").children[1].getAttribute("height"), 10);
 
             // downward-facing slingshot, draw straight line
             if (y0 < parseInt(rubberbandEl.getAttribute("y1"), 10)) {
+                y1 = yMax - parseInt(document.getElementById("gc-ground").children[1].getAttribute("height"), 10);
+                x1 = findThirdX(x0,
+                                y0,
+                                parseInt(rubberbandEl.getAttribute("x1"), 10),
+                                parseInt(rubberbandEl.getAttribute("y1"), 10),
+                                y1);
                 x2 = x1;
                 y2 = y1;
-            } else { // upward-facing slingshot, draw arc
-                x2 = parseInt(document.getElementById("gc-ground").children[1].getAttribute("width"), 10);
-                y2 = yMax - parseInt(document.getElementById("gc-ground").children[1].getAttribute("height"), 10);
             }
 
             drawCurve(trajectoryEl,
@@ -148,4 +151,15 @@ function findThirdPoint(x0: number, y0: number, x1: number, y1: number, x2?: num
     var y2 = y2 || ((y1 - y0) / (x1 - x0)) * (x2 - x0) + y0
 
     return [x2, y2];
+}
+
+function findThirdX(x0: number, y0: number, x1: number, y1: number, y2: number) {
+    if (x0 === x1) {
+        throw new Error("Divide by zero (same input x coords)");
+        return;
+    }
+
+    var x2 = ((y2 - y0) * (x1 - x0)) / (y1 - y0) + x0
+
+    return x2;
 }
