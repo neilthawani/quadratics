@@ -35,6 +35,8 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
     var rubberbandEl = document.querySelector("#gc-rubberband line");
     var trajectoryEl = <SVGPathElement>document.querySelector("#gc-trajectory path");
 
+    var scaffoldSentence = document.getElementsByClassName("scaffold")[0];
+
     var isDragging = false;
 
     // toggle bird/slingshot drag event on mousedown/mouseup
@@ -138,8 +140,13 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
             pathPoints.push([svgX, svgY]);
         }
 
-        var scaffoldSentence = document.getElementsByClassName("scaffold");
-        scaffoldSentence[0].removeClass("hidden");
+        scaffoldSentence.classList.remove("hidden");
+    });
+
+    // reset activity when student clicks "Fly again?"
+    scaffoldSentence.children[0].addEventListener("click", function(event: MouseEvent) {
+        bird.dispatchEvent(new Event("mouseup"));
+        this.parentElement.classList.add("hidden");
     });
 });
 
