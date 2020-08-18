@@ -102,21 +102,6 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
         }
         event.preventDefault();
         console.log("click");
-
-        // var birdGroup = document.getElementById("gc-bird"),
-        //     rubberbandGroup = document.querySelector("#gc-rubberband"),
-        //     trajectoryEl = document.querySelector("#gc-trajectory path");
-        //
-        // birdGroup.classList.add("hidden");
-        // rubberbandGroup.classList.add("hidden");
-        //
-        // var bird = <HTMLElement>document.getElementsByClassName("animated-bird")[0];
-        // debugger;
-        // bird.style['offsetPath'] = trajectoryEl.getAttribute("d");
-        // debugger;
-        // bird.classList.remove("hidden");
-        // debugger;
-
     });
 });
 
