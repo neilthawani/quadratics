@@ -15,10 +15,6 @@
 //
 // Design patterns: https://tony-scialo.github.io/react-typescript-slides/#/41
 
-// interface SVGElement extends Element {
-//     getTotalLength(): SVGElement;
-// }
-
 // mouse range of motion
 const xMin = 0;
 const xMax = 158; // gc-bird-obj:cx + 20
@@ -136,7 +132,7 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
                 bird.setAttribute("cx", svgX);
                 bird.setAttribute("cy", svgY);
             }, 1000);
-            pathPoints.push([<number>coords["x"], <number>coords["y"]])
+            pathPoints.push([svgX, svgY]);
         }
         // console.log("pathPoints", pathPoints);
         // debugger;
