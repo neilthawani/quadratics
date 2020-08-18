@@ -71,18 +71,28 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
             validYBounds = y > yMin && y < yMax;
 
         if (validXBounds && validYBounds) {
-            this.setAttribute("cx", x.toString());
-            this.setAttribute("cy", y.toString());
+            var mouseX = x.toString(),
+                mouseY = y.toString();
 
-            rubberbandEl.setAttribute("x2", x.toString())
-            rubberbandEl.setAttribute("y2", y.toString());
+            this.setAttribute("cx", mouseX);
+            this.setAttribute("cy", mouseY);
+
+            rubberbandEl.setAttribute("x2", mouseX)
+            rubberbandEl.setAttribute("y2", mouseY);
+
+            // (x0, y0): ball/mouse coords
+            // (x1, y1): trajectory coords, based on slingshot angle
+            // (x2, y2): predicted target, tangent to trajectory coords
+
+            // to calculate x1, y1
+            // given x0, y0 and rubberBandEl.getAttribute("x1") rubberBandEl.getAttribute("y1")
+
 
             var x0 = x,
                 y0 = y,
-                // get angle difference between coords of ball (x, y)
-                // and coords of rubberbandEl (parseInt(rubberbandEl.getAttribute("x2"), 10), parseInt(rubberbandEl.getAttribute("y2"), 10))
-                x1 = parseInt(rubberbandEl.getAttribute("x1"), 10),
-                y1 = parseInt(rubberbandEl.getAttribute("y2"), 10) - parseInt(rubberbandEl.getAttribute("y1"), 10),
+                [x1, y1] = findThirdPoint(x0,
+                                            y0,
+                                            parseInt(rubberbandEl.getAttribute("x1"), 10), parseInt(rubberbandEl.getAttribute("y1"), 10)),
                 x2 = parseInt(svgWidth, 10) - x,
                 y2 = y;
 
@@ -91,7 +101,7 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
               x1, y1,
               x2, y2);
         } else {
-            bird.dispatchEvent(new Event("mouseup"));
+            this.dispatchEvent(new Event("mouseup"));
         }
     });
 
@@ -112,4 +122,18 @@ function resetSpritePosition(el: Element, x: Object, y: Object) {
 
 function drawCurve(el, x0, y0, x1, y1, x2, y2) {
     el.setAttribute("d", `M${x0},${y0} Q${x1},${y1} ${x2},${y2}`);
+}
+
+function findThirdPoint(x0: number, y0: number, x1: number, y1: number) {//}, {x2 = 620, y2 = 0}: {x2?: number, y2?: number}) {
+    var x2 = 620;
+    var y2 = 0;
+    if (x0 === x1) {
+        throw new Error("Divide by zero (same input x coords)");
+        return;
+    }
+
+    var x2 = x2 || ((y2 - y0) * (x1 - x0)) / (y1 - y0) + x0
+    var y2 = y2 || ((y1 - y0) / (x1 - x0)) * (x2 - x0) + y0
+
+    return [x2, y2];
 }

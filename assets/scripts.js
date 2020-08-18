@@ -15,10 +15,10 @@
 // $> npx create-react-app my-first-ts --typescript
 //
 // Design patterns: https://tony-scialo.github.io/react-typescript-slides/#/41
-var xMin = 0;
-var xMax = 158; // gc-bird-obj:cx + 20
-var yMin = 0;
-var yMax = 300;
+const xMin = 0;
+const xMax = 158; // gc-bird-obj:cx + 20
+const yMin = 0;
+const yMax = 300;
 document.addEventListener("DOMContentLoaded", function (event) {
     // define query selectors, get related attributes
     var svg = document.getElementById("game-canvas"), svgWidth = svg.getAttribute("width"), svgHeight = svg.getAttribute("height");
@@ -51,18 +51,26 @@ document.addEventListener("DOMContentLoaded", function (event) {
         // if the bounds are exceeded, reset sprite positions
         var validXBounds = x > xMin && x < xMax, validYBounds = y > yMin && y < yMax;
         if (validXBounds && validYBounds) {
-            this.setAttribute("cx", x.toString());
-            this.setAttribute("cy", y.toString());
-            rubberbandEl.setAttribute("x2", x.toString());
-            rubberbandEl.setAttribute("y2", y.toString());
-            var x0 = x, y0 = y, 
-            // get angle difference between coords of ball (x, y)
-            // and coords of rubberbandEl (parseInt(rubberbandEl.getAttribute("x2"), 10), parseInt(rubberbandEl.getAttribute("y2"), 10))
-            x1 = parseInt(rubberbandEl.getAttribute("x1"), 10), y1 = parseInt(rubberbandEl.getAttribute("y2"), 10) - parseInt(rubberbandEl.getAttribute("y1"), 10), x2 = parseInt(svgWidth, 10) - x, y2 = y;
+            var mouseX = x.toString(), mouseY = y.toString();
+            this.setAttribute("cx", mouseX);
+            this.setAttribute("cy", mouseY);
+            rubberbandEl.setAttribute("x2", mouseX);
+            rubberbandEl.setAttribute("y2", mouseY);
+            // (x0, y0): ball/mouse coords
+            // (x1, y1): trajectory coords, based on slingshot angle
+            // (x2, y2): predicted target, tangent to trajectory coords
+            // to calculate x1, y1
+            // given x0, y0 and rubberBandEl.getAttribute("x1") rubberBandEl.getAttribute("y1")
+            var x0 = x, y0 = y, [x1, y1] = findThirdPoint(x0, y0, parseInt(rubberbandEl.getAttribute("x1"), 10), parseInt(rubberbandEl.getAttribute("y1"), 10));
+            console.log("x1", x1, "y1", y1);
+            // debugger;
+            // x1 = parseInt(rubberbandEl.getAttribute("x1"), 10),
+            // y1 = parseInt(rubberbandEl.getAttribute("y2"), 10) - parseInt(rubberbandEl.getAttribute("y1"), 10),
+            var x2 = parseInt(svgWidth, 10) - x, y2 = y;
             drawCurve(trajectoryEl, x0, y0, x1, y1, x2, y2);
         }
         else {
-            bird.dispatchEvent(new Event("mouseup"));
+            this.dispatchEvent(new Event("mouseup"));
         }
     });
     // let the bird fly
@@ -72,19 +80,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
         }
         event.preventDefault();
         console.log("click");
-        // var birdGroup = document.getElementById("gc-bird"),
-        //     rubberbandGroup = document.querySelector("#gc-rubberband"),
-        //     trajectoryEl = document.querySelector("#gc-trajectory path");
-        //
-        // birdGroup.classList.add("hidden");
-        // rubberbandGroup.classList.add("hidden");
-        //
-        // var bird = <HTMLElement>document.getElementsByClassName("animated-bird")[0];
-        // debugger;
-        // bird.style['offsetPath'] = trajectoryEl.getAttribute("d");
-        // debugger;
-        // bird.classList.remove("hidden");
-        // debugger;
     });
 });
 function resetSpritePosition(el, x, y) {
@@ -92,5 +87,21 @@ function resetSpritePosition(el, x, y) {
     el.setAttribute(Object.keys(y)[0], Object.values(y)[0]);
 }
 function drawCurve(el, x0, y0, x1, y1, x2, y2) {
-    el.setAttribute("d", "M" + x0 + "," + y0 + " Q" + x1 + "," + y1 + " " + x2 + "," + y2);
+    el.setAttribute("d", `M${x0},${y0} Q${x1},${y1} ${x2},${y2}`);
+}
+function findThirdPoint(x0, y0, x1, y1) {
+    var x2 = 620;
+    var y2 = 0;
+    if (x0 === x1) {
+        throw new Error("Divide by zero (same input x coords)");
+        return;
+    }
+    console.log("x2", x2, "y2", y2);
+    var x2 = x2 || ((y2 - y0) * (x1 - x0)) / (y1 - y0) + x0;
+    var y2 = y2 || ((y1 - y0) / (x1 - x0)) * (x2 - x0) + y0;
+    return [x2, y2];
+    // {
+    //     x: x2,
+    //     y: y2
+    // };
 }
