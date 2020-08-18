@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
         isDragging = false;
         resetSpritePosition(bird, {"cx": initialX}, {"cy": initialY});
         resetSpritePosition(rubberbandEl, {"x2": rubberbandEl.getAttribute("x1")}, {"y2": rubberbandEl.getAttribute("y1")})
-        drawCurve(trajectoryEl, 0, 0, 0, 0, 0, 0);
+        drawTrajectory(trajectoryEl, 0, 0, 0, 0, 0, 0);
     });
 
     // main slingshot dragging logic
@@ -81,7 +81,9 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
 
             // (x0, y0): ball/mouse coords
             // (x1, y1): trajectory coords, based on slingshot angle
-            // (x2, y2): predicted target, tangent to trajectory coords
+            // (x2, y2): predicted target
+
+            // upward-facing slingshot, draw arc
             var x0 = x,
                 y0 = y,
                 [x1, y1] = findThirdPoint(x0,
@@ -102,10 +104,10 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
                 y2 = y1;
             }
 
-            drawCurve(trajectoryEl,
-              x0, y0,
-              x1, y1,
-              x2, y2);
+            drawTrajectory(trajectoryEl,
+                      x0, y0,
+                      x1, y1,
+                      x2, y2);
         } else {
             this.dispatchEvent(new Event("mouseup"));
         }
@@ -126,7 +128,7 @@ function resetSpritePosition(el: Element, x: Object, y: Object) {
     el.setAttribute(Object.keys(y)[0], Object.values(y)[0]);
 }
 
-function drawCurve(el, x0, y0, x1, y1, x2, y2) {
+function drawTrajectory(el, x0, y0, x1, y1, x2, y2) {
     // downward-facing slingshot, draw straight line
     if (x1 === x2 && y1 === y2) {
         el.setAttribute("d", `M${x0} ${y0} L${x1} ${y1}`);

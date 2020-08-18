@@ -1,5 +1,4 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
-// var Bezier = require('bezier-js');
 // TypeScript Reference: https://tony-scialo.github.io/react-typescript-slides/
 // boolean, number, string, array, any
 // void, null, undefined, Object
@@ -16,6 +15,7 @@
 // $> npx create-react-app my-first-ts --typescript
 //
 // Design patterns: https://tony-scialo.github.io/react-typescript-slides/#/41
+// mouse range of motion
 const xMin = 0;
 const xMax = 158; // gc-bird-obj:cx + 20
 const yMin = 0;
@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         isDragging = false;
         resetSpritePosition(bird, { "cx": initialX }, { "cy": initialY });
         resetSpritePosition(rubberbandEl, { "x2": rubberbandEl.getAttribute("x1") }, { "y2": rubberbandEl.getAttribute("y1") });
-        drawCurve(trajectoryEl, 0, 0, 0, 0, 0, 0);
+        drawTrajectory(trajectoryEl, 0, 0, 0, 0, 0, 0);
     });
     // main slingshot dragging logic
     bird.addEventListener("mousemove", function (event) {
@@ -59,7 +59,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
             rubberbandEl.setAttribute("y2", mouseY);
             // (x0, y0): ball/mouse coords
             // (x1, y1): trajectory coords, based on slingshot angle
-            // (x2, y2): predicted target, tangent to trajectory coords
+            // (x2, y2): predicted target
+            // upward-facing slingshot, draw arc
             var x0 = x, y0 = y, [x1, y1] = findThirdPoint(x0, y0, parseInt(rubberbandEl.getAttribute("x1"), 10), parseInt(rubberbandEl.getAttribute("y1"), 10)), x2 = parseInt(document.getElementById("gc-ground").children[1].getAttribute("width"), 10), y2 = yMax - parseInt(document.getElementById("gc-ground").children[1].getAttribute("height"), 10);
             // downward-facing slingshot, draw straight line
             if (y0 < parseInt(rubberbandEl.getAttribute("y1"), 10)) {
@@ -68,7 +69,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 x2 = x1;
                 y2 = y1;
             }
-            drawCurve(trajectoryEl, x0, y0, x1, y1, x2, y2);
+            drawTrajectory(trajectoryEl, x0, y0, x1, y1, x2, y2);
         }
         else {
             this.dispatchEvent(new Event("mouseup"));
@@ -87,7 +88,7 @@ function resetSpritePosition(el, x, y) {
     el.setAttribute(Object.keys(x)[0], Object.values(x)[0]);
     el.setAttribute(Object.keys(y)[0], Object.values(y)[0]);
 }
-function drawCurve(el, x0, y0, x1, y1, x2, y2) {
+function drawTrajectory(el, x0, y0, x1, y1, x2, y2) {
     // downward-facing slingshot, draw straight line
     if (x1 === x2 && y1 === y2) {
         el.setAttribute("d", `M${x0} ${y0} L${x1} ${y1}`);
