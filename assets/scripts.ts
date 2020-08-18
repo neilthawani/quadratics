@@ -135,9 +135,10 @@ function drawCurve(el, x0, y0, x1, y1, x2, y2) {
     el.setAttribute("d", `M${x0},${y0} Q${x1},${y1} ${x2},${y2}`);
 }
 
-function findThirdPoint(x0: number, y0: number, x1: number, y1: number) {//}, {x2 = 620, y2 = 0}: {x2?: number, y2?: number}) {
-    var x2 = 620;
-    var y2 = 0;
+function findThirdPoint(x0: number, y0: number, x1: number, y1: number: x2?: number, y2?: number) {//}, {x2 = 620, y2 = 0}: {x2?: number, y2?: number}) {
+    var x2 = x2 || 620;
+    var y2 = y2 || 0;
+
     if (x0 === x1) {
         throw new Error("Divide by zero (same input x coords)");
         return;
