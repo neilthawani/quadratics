@@ -18,19 +18,8 @@
   },
   "homepage": "https://github.com/neilthawani/quadratics#readme",
   "dependencies": {
-    "@mathigon/boost": "0.5.2",
-    "@mathigon/core": "0.5.2",
-    "@mathigon/dev-server": "0.5.1",
-    "@mathigon/fermat": "0.5.2",
-    "@mathigon/hilbert": "0.5.2",
-    "bezier-js": "^2.6.1",
     "browserify": "^16.5.2",
     "live-server": "^1.2.1",
-    "requirejs": "^2.3.6",
-    "three": "0.119.1",
     "typescript": "3.9.7"
-  },
-  "devDependencies": {
-    "@types/node": "^14.0.27"
   }
 }

@@ -39,6 +39,10 @@ body {
     word-spacing: var(--wordSpacing);
 }
 
+.sentence.hidden {
+    display: none;
+}
+
 .btn {
     font-size: 18px;
     color: white;

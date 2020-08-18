@@ -1,5 +1,3 @@
-// var Bezier = require('bezier-js');
-
 // TypeScript Reference: https://tony-scialo.github.io/react-typescript-slides/
 // boolean, number, string, array, any
 // void, null, undefined, Object
@@ -17,6 +15,7 @@
 //
 // Design patterns: https://tony-scialo.github.io/react-typescript-slides/#/41
 
+// mouse range of motion
 const xMin = 0;
 const xMax = 158; // gc-bird-obj:cx + 20
 const yMin = 0;
