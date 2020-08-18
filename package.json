@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "This is a demo built for Mathigon, the textbook of the future.",
   "scripts": {
-    "build": "node node_modules/typescript/lib/tsc.js --target ES6 assets/scripts.ts > assets/compiled/scripts.js && browserify assets/compiled/scripts.js > assets/compiled/bundle.js",
+    "build": "node node_modules/typescript/lib/tsc.js --target ES6 assets/scripts.ts > assets/scripts.js && browserify assets/scripts.js > assets/bundle.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },
