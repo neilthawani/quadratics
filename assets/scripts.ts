@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
         initialY = bird.getAttribute("cy");
 
     var rubberbandEl = document.querySelector("#gc-rubberband line");
-    var trajectoryEl = document.querySelector("#gc-trajectory path");
+    var trajectoryEl = <SVGPathElement>document.querySelector("#gc-trajectory path");
 
     var isDragging = false;
 
@@ -124,18 +124,30 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
         }
         event.preventDefault();
         console.log("click");
-        // var pathLength = trajectoryEl.getTotalLength();
-        // var pathPoints = [];
-        // for (var i = 0; i < Math.floor(pathLength); i++) {
-        //     var coords = pathLength.getPointAtLength(i);
-        //     pathPoints.push([coords["x"], coords["y"]])
-        // }
-        //
+        var pathLength = trajectoryEl.getTotalLength();
+        var pathPoints = [];
+        for (var i = 0; i < Math.floor(pathLength); i++) {
+            var svgCoords = trajectoryEl.getPointAtLength(i),
+                svgX = svgCoords["x"].toString(),
+                svgY = svgCoords["y"].toString();
+            // console.log("coords", svgX, svgY);
+
+            setTimeout(function() {
+                bird.setAttribute("cx", svgX);
+                bird.setAttribute("cy", svgY);
+            }, 1000);
+            pathPoints.push([<number>coords["x"], <number>coords["y"]])
+        }
+        // console.log("pathPoints", pathPoints);
+        // debugger;
         // for (var i = 0; i < pathPoints.length; i++) {
-        //     setTimeout(function() {
-        //       bird.setAttribute("cx", pathPoints[0]);
-        //       bird.setAttribute("cy", pathPoints[1]);
-        //     }, 500);
+        //     var coords = pathPoints[i];
+            // console.log("coords", coords);
+            // setTimeout(function() {
+            //     console.log("pathPoints[i][0]", pathPoints[i][0], "pathPoints[i][1]", pathPoints[i][1]);
+            //     bird.setAttribute("cx", pathPoints[i][0]);
+            //     bird.setAttribute("cy", pathPoints[i][1]);
+            // }, 500);
         // }
     });
 });

@@ -15,6 +15,9 @@
 // $> npx create-react-app my-first-ts --typescript
 //
 // Design patterns: https://tony-scialo.github.io/react-typescript-slides/#/41
+// interface SVGElement extends Element {
+//     getTotalLength(): SVGElement;
+// }
 // mouse range of motion
 const xMin = 0;
 const xMax = 158; // gc-bird-obj:cx + 20
@@ -82,6 +85,28 @@ document.addEventListener("DOMContentLoaded", function (event) {
         }
         event.preventDefault();
         console.log("click");
+        var pathLength = trajectoryEl.getTotalLength();
+        // var pathPoints = [];
+        for (var i = 0; i < Math.floor(pathLength); i++) {
+            var svgCoords = trajectoryEl.getPointAtLength(i), svgX = svgCoords["x"].toString(), svgY = svgCoords["y"].toString();
+            // console.log("coords", svgX, svgY);
+            setTimeout(function () {
+                bird.setAttribute("cx", svgX);
+                bird.setAttribute("cy", svgY);
+            }, 1000);
+            // pathPoints.push([<number>coords["x"], <number>coords["y"]])
+        }
+        // console.log("pathPoints", pathPoints);
+        // debugger;
+        // for (var i = 0; i < pathPoints.length; i++) {
+        //     var coords = pathPoints[i];
+        // console.log("coords", coords);
+        // setTimeout(function() {
+        //     console.log("pathPoints[i][0]", pathPoints[i][0], "pathPoints[i][1]", pathPoints[i][1]);
+        //     bird.setAttribute("cx", pathPoints[i][0]);
+        //     bird.setAttribute("cy", pathPoints[i][1]);
+        // }, 500);
+        // }
     });
 });
 function resetSpritePosition(el, x, y) {
@@ -106,7 +131,6 @@ function findThirdPoint(x0, y0, x1, y1, x2, y2) {
     }
     var x2 = x2 || ((y2 - y0) * (x1 - x0)) / (y1 - y0) + x0;
     var y2 = y2 || ((y1 - y0) / (x1 - x0)) * (x2 - x0) + y0;
-    console.log("x2", x2, "y2", y2);
     return [x2, y2];
 }
 function findThirdX(x0, y0, x1, y1, y2) {
@@ -115,7 +139,6 @@ function findThirdX(x0, y0, x1, y1, y2) {
         return;
     }
     var x2 = ((y2 - y0) * (x1 - x0)) / (y1 - y0) + x0;
-    console.log("x22", x2, "y22", y2);
     return x2;
 }
 
