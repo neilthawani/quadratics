@@ -17,10 +17,19 @@
 //
 // Design patterns: https://tony-scialo.github.io/react-typescript-slides/#/41
 
-interface UpdateableSVGElement {
-    el: Element,
-    attributes: string[]
-}
+// [{
+//     element: bird,
+//     attributes: ["cx", "cy"]
+// }, {
+//     element: rubberbandEl,
+//     attributes: [{
+//         "x2": rubberbandEl.getAttribute("x1"),
+//         "y2": rubberbandEl.getAttribute("y1")
+//     }]
+// }, {
+//     element: trajectoryEl,
+//     attributes: ["x0", "y0", "x1", "y1", "x2", "y2"]
+// }]
 
 const xMin = 0;
 const xMax = 158; // gc-bird-obj:cx + 20
@@ -38,31 +47,31 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
         initialX = bird.getAttribute("cx"),
         initialY = bird.getAttribute("cy");
 
-    const rubberbandEl = document.querySelector("#gc-rubberband line");
-    const trajectoryEl = document.querySelector("#gc-trajectory path");
+    var rubberbandEl = document.querySelector("#gc-rubberband line");
+    var trajectoryEl = document.querySelector("#gc-trajectory path");
 
     var isDragging = false;
 
     // reset sprite positions if svg is clicked
     svg.addEventListener("click", function(event: MouseEvent) {
         isDragging = false;
-        resetSpritePositions(bird, rubberbandEl, trajectoryEl, initialX, initialY);
+        resetSpritePosition(bird, {"cx": initialX}, {"cy": initialY});
+        resetSpritePosition(rubberbandEl, {"x2": rubberbandEl.getAttribute("x1")}, {"y2": rubberbandEl.getAttribute("y1")})
+        drawCurve(trajectoryEl, 0, 0, 0, 0, 0, 0);
     });
 
     // toggle bird/slingshot drag event on mousedown/mouseup
     bird.addEventListener("mousedown", function(event: MouseEvent) {
         // console.log("mousedown");
         event.preventDefault();
-        isDragging = isDragging ? false : true;
+        isDragging = true;
     });
 
     // reset sprite positions on mouseup
     bird.addEventListener("mouseup", function(event: MouseEvent) {
         // console.log("mouseup");
         event.preventDefault();
-        isDragging = false;
-        resetSpritePositions(this, rubberbandEl, trajectoryEl, initialX, initialY);
-        isDragging = false;
+        svg.dispatchEvent(new Event("click"));
     });
 
     // main slingshot dragging logic
@@ -79,7 +88,7 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
             y = event.offsetY;
 
         // allow player to move the bird within pre-defined (x, y) bounds
-        // if the bounds are exceeded, reset the slingshot
+        // if the bounds are exceeded, reset sprite positions
         var validXBounds = x > xMin && x < xMax,
             validYBounds = y > yMin && y < yMax;
 
@@ -102,25 +111,16 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
               x1, y1,
               x2, y2);
         } else {
-            isDragging = false;
-            resetSpritePositions(this, rubberbandEl, trajectoryEl, initialX, initialY);
+            svg.dispatchEvent(new Event("click"));
         }
     });
 });
 
+function resetSpritePosition(el: Element, x: Object, y: Object) {
+    el.setAttribute(Object.keys(x)[0], Object.values(x)[0]);
+    el.setAttribute(Object.keys(y)[0], Object.values(y)[0]);
+}
+
 function drawCurve(el, x0, y0, x1, y1, x2, y2) {
     el.setAttribute("d", `M${x0},${y0} Q${x1},${y1} ${x2},${y2}`);
-}
-
-function resetSpritePositions(bird: Element, rubberbandEl: Element, trajectoryEl: Element, x: string, y: string) {
-    bird.setAttribute("cx", x);
-    bird.setAttribute("cy", y);
-
-    resetRubberbandPosition(rubberbandEl);
-    drawCurve(trajectoryEl, 0, 0, 0, 0, 0, 0);
-}
-
-function resetRubberbandPosition(rubberbandEl: Element) {
-    rubberbandEl.setAttribute("x2", rubberbandEl.getAttribute("x1"));
-    rubberbandEl.setAttribute("y2", rubberbandEl.getAttribute("y1"));
 }
