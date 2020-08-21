@@ -39,8 +39,8 @@ body {
     word-spacing: var(--wordSpacing);
 }
 
-.sentence.scaffold {
-    /* transition: 0.5s all; */
+/* .sentence.scaffold {
+    transition: 0.5s all;
     animation: pulse 2s infinite;
 }
 
@@ -51,7 +51,7 @@ body {
     100% {
         background-color: #FF4136;
     }
-}
+} */
 
 .hidden {
     display: none;
@@ -64,7 +64,7 @@ body {
     border: none;
     border-radius: 24px;
     padding: 0 1.2em;
-    margin: 0;
+    margin: 5px 15px;
     background-color: var(--blue);
     display: inline-block;
     width: auto;
@@ -109,7 +109,7 @@ body {
 
 #gc-bird {
     animation-name: gcBirdFly;
-    animation-duration: 10000ms;
+    animation-duration: 2000ms;
     animation-iteration-count: 1;
     animation-timing-function: ease-out;
     animation-fill-mode: forwards;

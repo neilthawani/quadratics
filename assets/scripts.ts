@@ -107,7 +107,7 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
                 [x1, y1] = findThirdPoint(x0,
                                           y0,
                                           parseInt(rubberbandEl.getAttribute("x1"), 10), parseInt(rubberbandEl.getAttribute("y1"), 10)),
-                x2 = parseInt(document.getElementById("gc-ground").children[1].getAttribute("width"), 10),
+                x2 = parseInt(document.getElementById("gc-ground").children[1].getAttribute("width"), 10) - 2 * parseInt(bird.getAttribute("r"), 10),
                 y2 = yMax - parseInt(document.getElementById("gc-ground").children[1].getAttribute("height"), 10);
 
             // downward-facing slingshot, draw straight line
@@ -143,10 +143,8 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
 
         console.log("trajectoryEl.getAttribute(\"d\")", trajectoryEl.getAttribute("d"));
 
-        bird.setAttribute("cx", "0");
-        bird.setAttribute("cy", "0");
         var birdPath = trajectoryEl.getAttribute("d");
-        // trajectoryEl.classList.add("hidden");
+        trajectoryEl.classList.add("hidden");
         // var pathMx = rubberbandEl.getAttribute("x2");
         // var pathMy = rubberbandEl.getAttribute("y2");
         // console.log("path", path, "pathMx", pathMx, "pathMy", pathMy);
@@ -160,9 +158,14 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
         // var trajectoryRetractedPath = window.SVGPathEditor.reverse(normalizedPath);
         // trajectoryEl.style.offsetPath = `path('${trajectoryRetractedPath}')`
 
-        birdGroup.style.offsetPath = `path('${birdPath}')`;
+        // setTimeout(function() {
+            bird.setAttribute("cx", "0");
+            bird.setAttribute("cy", "0");
+            birdGroup.style.offsetPath = `path('${birdPath}')`;
+        // }, 250);
 
-        // scaffoldSentence.classList.remove("hidden");
+
+        scaffoldSentence.classList.remove("hidden");
     });
 
     // reset activity when student clicks "Fly again?"

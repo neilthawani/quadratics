@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
             // (x1, y1): trajectory coords, based on slingshot angle
             // (x2, y2): predicted target
             // upward-facing slingshot, draw arc
-            var x0 = x, y0 = y, [x1, y1] = findThirdPoint(x0, y0, parseInt(rubberbandEl.getAttribute("x1"), 10), parseInt(rubberbandEl.getAttribute("y1"), 10)), x2 = parseInt(document.getElementById("gc-ground").children[1].getAttribute("width"), 10), y2 = yMax - parseInt(document.getElementById("gc-ground").children[1].getAttribute("height"), 10);
+            var x0 = x, y0 = y, [x1, y1] = findThirdPoint(x0, y0, parseInt(rubberbandEl.getAttribute("x1"), 10), parseInt(rubberbandEl.getAttribute("y1"), 10)), x2 = parseInt(document.getElementById("gc-ground").children[1].getAttribute("width"), 10) - 2 * parseInt(bird.getAttribute("r"), 10), y2 = yMax - parseInt(document.getElementById("gc-ground").children[1].getAttribute("height"), 10);
             // downward-facing slingshot, draw straight line
             if (y0 < parseInt(rubberbandEl.getAttribute("y1"), 10)) {
                 y1 = yMax - parseInt(document.getElementById("gc-ground").children[1].getAttribute("height"), 10);
@@ -86,10 +86,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
         }
         event.preventDefault();
         console.log("trajectoryEl.getAttribute(\"d\")", trajectoryEl.getAttribute("d"));
-        bird.setAttribute("cx", "0");
-        bird.setAttribute("cy", "0");
         var birdPath = trajectoryEl.getAttribute("d");
-        // trajectoryEl.classList.add("hidden");
+        trajectoryEl.classList.add("hidden");
         // var pathMx = rubberbandEl.getAttribute("x2");
         // var pathMy = rubberbandEl.getAttribute("y2");
         // console.log("path", path, "pathMx", pathMx, "pathMy", pathMy);
@@ -98,11 +96,15 @@ document.addEventListener("DOMContentLoaded", function (event) {
         //   reverseNormalized: reverseNormalizedPath,
         //   reverse: reverseSubPath
         // };
-        var normalizedPath = window.SVGPathEditor.normalize(birdPath);
-        var trajectoryRetractedPath = window.SVGPathEditor.reverse(normalizedPath);
-        trajectoryEl.style.offsetPath = `path('${trajectoryRetractedPath}')`;
+        // var normalizedPath = window.SVGPathEditor.normalize(birdPath);
+        // var trajectoryRetractedPath = window.SVGPathEditor.reverse(normalizedPath);
+        // trajectoryEl.style.offsetPath = `path('${trajectoryRetractedPath}')`
+        // setTimeout(function() {
+        bird.setAttribute("cx", "0");
+        bird.setAttribute("cy", "0");
         birdGroup.style.offsetPath = `path('${birdPath}')`;
-        // scaffoldSentence.classList.remove("hidden");
+        // }, 250);
+        scaffoldSentence.classList.remove("hidden");
     });
     // reset activity when student clicks "Fly again?"
     scaffoldSentence.children[0].addEventListener("click", function (event) {
