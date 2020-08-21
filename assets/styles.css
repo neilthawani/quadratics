@@ -115,11 +115,6 @@ body {
     animation-fill-mode: forwards;
 }
 
-/* #gc-bird-obj {
-    cx: 138;
-    cy: 208;
-} */
-
 @keyframes fly {
     0% {
         offset-distance: 0%;
