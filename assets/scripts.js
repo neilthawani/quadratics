@@ -1,19 +1,4 @@
-// TypeScript Reference: https://tony-scialo.github.io/react-typescript-slides/
-// boolean, number, string, array, any
-// void, null, undefined, Object
-//
-// interface User {
-//     firstName: string,
-//     lastName: string
-// }
-//
-// function sayHello(user: User) {
-//     return `Hi ${user.firstName} ${user.lastName}`
-// }
-//
-// $> npx create-react-app my-first-ts --typescript
-//
-// Design patterns: https://tony-scialo.github.io/react-typescript-slides/#/41
+// import Snap from 'snapsvg';
 // mouse range of motion
 const xMin = 0;
 const xMax = 158; // gc-bird-obj:cx + 20
@@ -23,6 +8,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     // define query selectors, get related attributes
     var svg = document.getElementById("game-canvas"), svgWidth = svg.getAttribute("width"), svgHeight = svg.getAttribute("height");
     var birdGroup = document.getElementById("gc-bird"), bird = birdGroup.children[1], initialX = bird.getAttribute("cx"), initialY = bird.getAttribute("cy");
+    console.log("initialX", initialX, "initialY", initialY);
     var rubberbandEl = document.querySelector("#gc-rubberband line");
     var trajectoryEl = document.querySelector("#gc-trajectory path");
     var scaffoldSentence = document.getElementsByClassName("scaffold")[0];
@@ -82,17 +68,14 @@ document.addEventListener("DOMContentLoaded", function (event) {
             return;
         }
         event.preventDefault();
-        var pathLength = trajectoryEl.getTotalLength();
-        var pathPoints = [];
-        for (var i = 0; i < Math.floor(pathLength); i++) {
-            var svgCoords = trajectoryEl.getPointAtLength(i), svgX = svgCoords["x"].toString(), svgY = svgCoords["y"].toString();
-            // console.log("coords", svgX, svgY);
-            setTimeout(function () {
-                bird.setAttribute("cx", svgX);
-                bird.setAttribute("cy", svgY);
-            }, 1000);
-            pathPoints.push([svgX, svgY]);
-        }
+        console.log("trajectoryEl.getAttribute(\"d\")", trajectoryEl.getAttribute("d"));
+        bird.setAttribute("cx", "0");
+        bird.setAttribute("cy", "0");
+        var path = trajectoryEl.getAttribute("d");
+        var pathMx = rubberbandEl.getAttribute("x2");
+        var pathMy = rubberbandEl.getAttribute("y2");
+        console.log("path", path, "pathMx", pathMx, "pathMy", pathMy);
+        birdGroup.style.offsetPath = `path('${trajectoryEl.getAttribute("d")}')`;
         scaffoldSentence.classList.remove("hidden");
     });
     // reset activity when student clicks "Fly again?"

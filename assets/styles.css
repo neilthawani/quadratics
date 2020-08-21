@@ -41,7 +41,7 @@ body {
 
 .sentence.scaffold {
     /* transition: 0.5s all; */
-    animation: pulse 5s infinite;
+    animation: pulse 2s infinite;
 }
 
 @keyframes pulse {
@@ -105,4 +105,30 @@ body {
     stroke-linecap: round;
     fill: none;
     stroke-dasharray: 2 2 6 6;
+}
+
+#gc-bird {
+    animation-name: fly;
+    animation-duration: 10000ms;
+    animation-iteration-count: 1;
+    animation-timing-function: ease-out;
+    animation-fill-mode: forwards;
+}
+
+/* #gc-bird-obj {
+    cx: 138;
+    cy: 208;
+} */
+
+@keyframes fly {
+    0% {
+        offset-distance: 0%;
+        animation-timing-function: cubic-bezier(0.33333, 0, 0.66667, 0.33333);
+    }
+    50% {
+        animation-timing-function: cubic-bezier(0.33333, 0.66667, 0.66667, 1);
+    }
+    100% {
+        offset-distance: 100%;
+    }
 }

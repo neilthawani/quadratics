@@ -1,3 +1,5 @@
+// import Snap from 'snapsvg';
+
 // TypeScript Reference: https://tony-scialo.github.io/react-typescript-slides/
 // boolean, number, string, array, any
 // void, null, undefined, Object
@@ -15,6 +17,10 @@
 //
 // Design patterns: https://tony-scialo.github.io/react-typescript-slides/#/41
 
+interface CSSStyleDeclaration {
+    offsetPath: string
+}
+
 // mouse range of motion
 const xMin = 0;
 const xMax = 158; // gc-bird-obj:cx + 20
@@ -31,6 +37,8 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
         bird = birdGroup.children[1],
         initialX = bird.getAttribute("cx"),
         initialY = bird.getAttribute("cy");
+
+    console.log("initialX", initialX, "initialY", initialY);
 
     var rubberbandEl = document.querySelector("#gc-rubberband line");
     var trajectoryEl = <SVGPathElement>document.querySelector("#gc-trajectory path");
@@ -125,20 +133,16 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
 
         event.preventDefault();
 
-        var pathLength = trajectoryEl.getTotalLength();
-        var pathPoints = [];
-        for (var i = 0; i < Math.floor(pathLength); i++) {
-            var svgCoords = trajectoryEl.getPointAtLength(i),
-                svgX = svgCoords["x"].toString(),
-                svgY = svgCoords["y"].toString();
-            // console.log("coords", svgX, svgY);
+        console.log("trajectoryEl.getAttribute(\"d\")", trajectoryEl.getAttribute("d"));
 
-            setTimeout(function() {
-                bird.setAttribute("cx", svgX);
-                bird.setAttribute("cy", svgY);
-            }, 1000);
-            pathPoints.push([svgX, svgY]);
-        }
+        bird.setAttribute("cx", "0");
+        bird.setAttribute("cy", "0");
+        var path = trajectoryEl.getAttribute("d");
+        var pathMx = rubberbandEl.getAttribute("x2");
+        var pathMy = rubberbandEl.getAttribute("y2");
+        console.log("path", path, "pathMx", pathMx, "pathMy", pathMy);
+
+        birdGroup.style.offsetPath = `path('${trajectoryEl.getAttribute("d")}')`;
 
         scaffoldSentence.classList.remove("hidden");
     });
