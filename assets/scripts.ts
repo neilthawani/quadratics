@@ -1,5 +1,3 @@
-// import Snap from 'snapsvg';
-
 // TypeScript Reference: https://tony-scialo.github.io/react-typescript-slides/
 // boolean, number, string, array, any
 // void, null, undefined, Object
@@ -17,9 +15,19 @@
 //
 // Design patterns: https://tony-scialo.github.io/react-typescript-slides/#/41
 
-interface CSSStyleDeclaration {
-    offsetPath: string
+export {};
+
+declare global {
+    interface Window {
+        SVGPathEditor: any;
+    }
+
+    interface CSSStyleDeclaration {
+        offsetPath: string
+    }
 }
+
+let SVGPathEditor = window.SVGPathEditor;
 
 // mouse range of motion
 const xMin = 0;
@@ -137,14 +145,24 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
 
         bird.setAttribute("cx", "0");
         bird.setAttribute("cy", "0");
-        var path = trajectoryEl.getAttribute("d");
-        var pathMx = rubberbandEl.getAttribute("x2");
-        var pathMy = rubberbandEl.getAttribute("y2");
-        console.log("path", path, "pathMx", pathMx, "pathMy", pathMy);
+        var birdPath = trajectoryEl.getAttribute("d");
+        // trajectoryEl.classList.add("hidden");
+        // var pathMx = rubberbandEl.getAttribute("x2");
+        // var pathMy = rubberbandEl.getAttribute("y2");
+        // console.log("path", path, "pathMx", pathMx, "pathMy", pathMy);
 
-        birdGroup.style.offsetPath = `path('${trajectoryEl.getAttribute("d")}')`;
+        // var SVGPathEditor = {
+        //   normalize: normalizePath,
+        //   reverseNormalized: reverseNormalizedPath,
+        //   reverse: reverseSubPath
+        // };
+        // var normalizedPath = window.SVGPathEditor.normalize(birdPath);
+        // var trajectoryRetractedPath = window.SVGPathEditor.reverse(normalizedPath);
+        // trajectoryEl.style.offsetPath = `path('${trajectoryRetractedPath}')`
 
-        scaffoldSentence.classList.remove("hidden");
+        birdGroup.style.offsetPath = `path('${birdPath}')`;
+
+        // scaffoldSentence.classList.remove("hidden");
     });
 
     // reset activity when student clicks "Fly again?"

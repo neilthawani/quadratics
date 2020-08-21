@@ -1,4 +1,20 @@
-// import Snap from 'snapsvg';
+// TypeScript Reference: https://tony-scialo.github.io/react-typescript-slides/
+// boolean, number, string, array, any
+// void, null, undefined, Object
+//
+// interface User {
+//     firstName: string,
+//     lastName: string
+// }
+//
+// function sayHello(user: User) {
+//     return `Hi ${user.firstName} ${user.lastName}`
+// }
+//
+// $> npx create-react-app my-first-ts --typescript
+//
+// Design patterns: https://tony-scialo.github.io/react-typescript-slides/#/41
+let SVGPathEditor = window.SVGPathEditor;
 // mouse range of motion
 const xMin = 0;
 const xMax = 158; // gc-bird-obj:cx + 20
@@ -71,12 +87,21 @@ document.addEventListener("DOMContentLoaded", function (event) {
         console.log("trajectoryEl.getAttribute(\"d\")", trajectoryEl.getAttribute("d"));
         bird.setAttribute("cx", "0");
         bird.setAttribute("cy", "0");
-        var path = trajectoryEl.getAttribute("d");
-        var pathMx = rubberbandEl.getAttribute("x2");
-        var pathMy = rubberbandEl.getAttribute("y2");
-        console.log("path", path, "pathMx", pathMx, "pathMy", pathMy);
-        birdGroup.style.offsetPath = `path('${trajectoryEl.getAttribute("d")}')`;
-        scaffoldSentence.classList.remove("hidden");
+        var birdPath = trajectoryEl.getAttribute("d");
+        // trajectoryEl.classList.add("hidden");
+        // var pathMx = rubberbandEl.getAttribute("x2");
+        // var pathMy = rubberbandEl.getAttribute("y2");
+        // console.log("path", path, "pathMx", pathMx, "pathMy", pathMy);
+        // var SVGPathEditor = {
+        //   normalize: normalizePath,
+        //   reverseNormalized: reverseNormalizedPath,
+        //   reverse: reverseSubPath
+        // };
+        var normalizedPath = window.SVGPathEditor.normalize(birdPath);
+        var trajectoryRetractedPath = window.SVGPathEditor.reverse(normalizedPath);
+        trajectoryEl.style.offsetPath = `path('${trajectoryRetractedPath}')`;
+        birdGroup.style.offsetPath = `path('${birdPath}')`;
+        // scaffoldSentence.classList.remove("hidden");
     });
     // reset activity when student clicks "Fly again?"
     scaffoldSentence.children[0].addEventListener("click", function (event) {

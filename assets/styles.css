@@ -53,7 +53,7 @@ body {
     }
 }
 
-.sentence.scaffold.hidden {
+.hidden {
     display: none;
 }
 
@@ -108,14 +108,14 @@ body {
 }
 
 #gc-bird {
-    animation-name: fly;
+    animation-name: gcBirdFly;
     animation-duration: 10000ms;
     animation-iteration-count: 1;
     animation-timing-function: ease-out;
     animation-fill-mode: forwards;
 }
 
-@keyframes fly {
+@keyframes gcBirdFly {
     0% {
         offset-distance: 0%;
         animation-timing-function: cubic-bezier(0.33333, 0, 0.66667, 0.33333);
