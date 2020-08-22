@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
         svgHeight = svg.getAttribute("height");
 
     var birdGroup = document.getElementById("gc-bird"),
-        bird = birdGroup.children[1],
+        bird = <SVGElement>birdGroup.children[1],
         initialX = bird.getAttribute("cx"),
         initialY = bird.getAttribute("cy");
 
@@ -56,11 +56,19 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
     var isDragging = false;
 
     // initialize the bird
+    var initializeBirdAnimationDuration = 1000;
     bird.style.animationName = "initializeBird";
-    bird.style.animationDuration = `1000ms`;
-    bird.style.animationTimingFunction = "cubic-bezier(.5,1,.5,0)";
+    bird.style.animationDuration = `${1000}ms`;
+    bird.style.animationTimingFunction = "ease-in-out";
     bird.style.animationIterationCount = "1";
     bird.style.animationFillMode = "forwards";
+    setTimeout(function() {
+        bird.style.animationName = "";
+        bird.style.animationDuration = "";
+        bird.style.animationTimingFunction = "";
+        bird.style.animationIterationCount = "";
+        bird.style.animationFillMode = "";
+    }, initializeBirdAnimationDuration);
 
     // toggle bird/slingshot drag event on mousedown/mouseup
     bird.addEventListener("mousedown", function(event: MouseEvent) {
@@ -165,12 +173,12 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
         var trajectoryRetractedPath = window.SVGPathEditor.reverse(normalizedPath);
         trajectoryEl.style.offsetPath = `path('${trajectoryRetractedPath}')`
 
-        var animationDuration = 4000;
+        var gcBirdFlyAnimationDuration = 4000;
 
-        bird.setAttribute("cx", "0");
-        bird.setAttribute("cy", "0");
+        // bird.setAttribute("cx", "0");
+        // bird.setAttribute("cy", "0");
         birdGroup.style.animationName = "gcBirdFly";
-        birdGroup.style.animationDuration = `${animationDuration}ms`;
+        birdGroup.style.animationDuration = "4000ms";//`${animationDuration}ms`;
         birdGroup.style.animationTimingFunction = "ease-out";
         birdGroup.style.animationIterationCount = "1";
         birdGroup.style.animationFillMode = "forwards";
@@ -179,7 +187,7 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
         // cannot change 'display' attributes while animation is in progress
         setTimeout(function() {
             scaffoldContainer.classList.remove("hidden");
-        }, animationDuration);
+        }, 4000);
     });
 
     // reset activity when student clicks "Fly again?"

@@ -30,6 +30,20 @@ document.addEventListener("DOMContentLoaded", function (event) {
     var trajectoryEl = document.querySelector("#gc-trajectory path");
     var scaffoldContainer = document.getElementsByClassName("scaffold-container")[0];
     var isDragging = false;
+    // initialize the bird
+    var initializeBirdAnimationDuration = 1000;
+    bird.style.animationName = "initializeBird";
+    bird.style.animationDuration = `${1000}ms`;
+    bird.style.animationTimingFunction = "ease-in-out";
+    bird.style.animationIterationCount = "1";
+    bird.style.animationFillMode = "forwards";
+    setTimeout(function () {
+        bird.style.animationName = "";
+        bird.style.animationDuration = "";
+        bird.style.animationTimingFunction = "";
+        bird.style.animationIterationCount = "";
+        bird.style.animationFillMode = "";
+    }, initializeBirdAnimationDuration);
     // toggle bird/slingshot drag event on mousedown/mouseup
     bird.addEventListener("mousedown", function (event) {
         event.preventDefault();
@@ -53,30 +67,30 @@ document.addEventListener("DOMContentLoaded", function (event) {
         var x = event.offsetX, y = event.offsetY;
         // allow player to move the bird within pre-defined (x, y) bounds
         // if the bounds are exceeded, reset sprite positions
-        var validXBounds = x > xMin && x < xMax, validYBounds = y > yMin && y < yMax;
-        if (validXBounds && validYBounds) {
-            var mouseX = x.toString(), mouseY = y.toString();
-            this.setAttribute("cx", mouseX);
-            this.setAttribute("cy", mouseY);
-            rubberbandEl.setAttribute("x2", mouseX);
-            rubberbandEl.setAttribute("y2", mouseY);
-            // (x0, y0): ball/mouse coords
-            // (x1, y1): trajectory coords, based on slingshot angle
-            // (x2, y2): predicted target
-            // upward-facing slingshot, draw arc
-            var x0 = x, y0 = y, [x1, y1] = findThirdPoint(x0, y0, parseInt(rubberbandEl.getAttribute("x1"), 10), parseInt(rubberbandEl.getAttribute("y1"), 10)), x2 = parseInt(document.getElementById("gc-ground").children[1].getAttribute("width"), 10) - 2 * parseInt(bird.getAttribute("r"), 10), y2 = yMax - parseInt(document.getElementById("gc-ground").children[1].getAttribute("height"), 10);
-            // downward-facing slingshot, draw straight line
-            if (y0 < parseInt(rubberbandEl.getAttribute("y1"), 10)) {
-                y1 = yMax - parseInt(document.getElementById("gc-ground").children[1].getAttribute("height"), 10);
-                x1 = findThirdX(x0, y0, parseInt(rubberbandEl.getAttribute("x1"), 10), parseInt(rubberbandEl.getAttribute("y1"), 10), y1);
-                x2 = x1;
-                y2 = y1;
-            }
-            drawTrajectory(trajectoryEl, x0, y0, x1, y1, x2, y2);
+        // var validXBounds = x > xMin && x < xMax,
+        //     validYBounds = y > yMin && y < yMax;
+        // if (validXBounds && validYBounds) {
+        var mouseX = x.toString(), mouseY = y.toString();
+        this.setAttribute("cx", mouseX);
+        this.setAttribute("cy", mouseY);
+        rubberbandEl.setAttribute("x2", mouseX);
+        rubberbandEl.setAttribute("y2", mouseY);
+        // (x0, y0): ball/mouse coords
+        // (x1, y1): trajectory coords, based on slingshot angle
+        // (x2, y2): predicted target
+        // upward-facing slingshot, draw arc
+        var x0 = x, y0 = y, [x1, y1] = findThirdPoint(x0, y0, parseInt(rubberbandEl.getAttribute("x1"), 10), parseInt(rubberbandEl.getAttribute("y1"), 10)), x2 = parseInt(document.getElementById("gc-ground").children[1].getAttribute("width"), 10) - 2 * parseInt(bird.getAttribute("r"), 10), y2 = yMax - parseInt(document.getElementById("gc-ground").children[1].getAttribute("height"), 10);
+        // downward-facing slingshot, draw straight line
+        if (y0 < parseInt(rubberbandEl.getAttribute("y1"), 10)) {
+            y1 = yMax - parseInt(document.getElementById("gc-ground").children[1].getAttribute("height"), 10);
+            x1 = findThirdX(x0, y0, parseInt(rubberbandEl.getAttribute("x1"), 10), parseInt(rubberbandEl.getAttribute("y1"), 10), y1);
+            x2 = x1;
+            y2 = y1;
         }
-        else {
-            this.dispatchEvent(new Event("mouseup"));
-        }
+        drawTrajectory(trajectoryEl, x0, y0, x1, y1, x2, y2);
+        // } else {
+        //     this.dispatchEvent(new Event("mouseup"));
+        // }
     });
     // let the bird fly
     svg.addEventListener("click", function (event) {
@@ -99,10 +113,11 @@ document.addEventListener("DOMContentLoaded", function (event) {
         var normalizedPath = window.SVGPathEditor.normalize(birdPath);
         var trajectoryRetractedPath = window.SVGPathEditor.reverse(normalizedPath);
         trajectoryEl.style.offsetPath = `path('${trajectoryRetractedPath}')`;
-        var animationDuration = 4000;
-        bird.setAttribute("cx", "0");
-        bird.setAttribute("cy", "0");
-        birdGroup.style.animationDuration = `${animationDuration}ms`;
+        var gcBirdFlyAnimationDuration = 4000;
+        // bird.setAttribute("cx", "0");
+        // bird.setAttribute("cy", "0");
+        birdGroup.style.animationName = "gcBirdFly";
+        birdGroup.style.animationDuration = "4000ms"; //`${animationDuration}ms`;
         birdGroup.style.animationTimingFunction = "ease-out";
         birdGroup.style.animationIterationCount = "1";
         birdGroup.style.animationFillMode = "forwards";
@@ -110,7 +125,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         // cannot change 'display' attributes while animation is in progress
         setTimeout(function () {
             scaffoldContainer.classList.remove("hidden");
-        }, animationDuration);
+        }, 4000);
     });
     // reset activity when student clicks "Fly again?"
     scaffoldContainer.children[1].addEventListener("click", function (event) {

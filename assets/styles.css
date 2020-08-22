@@ -131,6 +131,11 @@ body {
     stroke-dasharray: 2 2 6 6;
 }
 
+.scaffold-container {
+    display: flex;
+    align-items: baseline;
+}
+
 .credits-container .sentence {
     display: flex;
     justify-content: center;
