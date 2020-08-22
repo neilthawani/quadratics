@@ -17,6 +17,11 @@ body {
     max-width: 1240px;
 }
 
+.hidden {
+    display: none;
+}
+
+
 .heading {
     color: rgb(51, 51, 51);
     border-bottom-color: rgb(221, 221, 221);
@@ -37,42 +42,6 @@ body {
     font-size: var(--fontSize);
     line-height: var(--lineHeight);
     word-spacing: var(--wordSpacing);
-}
-
-.credits-container .sentence {
-    display: flex;
-    justify-content: center;
-    transition: 0.5s all;
-    animation: creditsColorChange 2s infinite;
-}
-
-.credits-container .sentence a {
-    color: inherit;
-}
-
-@keyframes creditsColorChange {
-    0% {
-        color: var(--red);
-    }
-    20% {
-        color: var(--orange);
-    }
-    40% {
-        color: var(--yellow);
-    }
-    60% {
-        color: var(--green);
-    }
-    80% {
-        color: var(--blue);
-    }
-    100% {
-        color: var(--red);
-    }
-}
-
-.hidden {
-    display: none;
 }
 
 .btn {
@@ -120,19 +89,6 @@ body {
     stroke-linecap: round;
 }
 
-#gc-bird circle {
-    fill: var(--red);
-    stroke: var(--orange);
-}
-
-#gc-trajectory path {
-    stroke-width: 2px;
-    stroke: var(--blue);
-    stroke-linecap: round;
-    fill: none;
-    stroke-dasharray: 2 2 6 6;
-}
-
 #gc-bird {
     animation-name: gcBirdFly;
 }
@@ -147,5 +103,50 @@ body {
     }
     100% {
         offset-distance: 100%;
+    }
+}
+
+#gc-bird circle {
+    fill: var(--red);
+    stroke: var(--orange);
+}
+
+#gc-trajectory path {
+    stroke-width: 2px;
+    stroke: var(--blue);
+    stroke-linecap: round;
+    fill: none;
+    stroke-dasharray: 2 2 6 6;
+}
+
+.credits-container .sentence {
+    display: flex;
+    justify-content: center;
+    transition: 0.5s all;
+    animation: creditsColorChange 2s infinite;
+}
+
+.credits-container .sentence a {
+    color: inherit;
+}
+
+@keyframes creditsColorChange {
+    0% {
+        color: var(--red);
+    }
+    20% {
+        color: var(--orange);
+    }
+    40% {
+        color: var(--yellow);
+    }
+    60% {
+        color: var(--green);
+    }
+    80% {
+        color: var(--blue);
+    }
+    100% {
+        color: var(--red);
     }
 }
