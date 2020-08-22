@@ -55,6 +55,13 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
 
     var isDragging = false;
 
+    // initialize the bird
+    bird.style.animationName = "initializeBird";
+    bird.style.animationDuration = `1000ms`;
+    bird.style.animationTimingFunction = "cubic-bezier(.5,1,.5,0)";
+    bird.style.animationIterationCount = "1";
+    bird.style.animationFillMode = "forwards";
+
     // toggle bird/slingshot drag event on mousedown/mouseup
     bird.addEventListener("mousedown", function(event: MouseEvent) {
         event.preventDefault();
@@ -162,6 +169,7 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
 
         bird.setAttribute("cx", "0");
         bird.setAttribute("cy", "0");
+        birdGroup.style.animationName = "gcBirdFly";
         birdGroup.style.animationDuration = `${animationDuration}ms`;
         birdGroup.style.animationTimingFunction = "ease-out";
         birdGroup.style.animationIterationCount = "1";
