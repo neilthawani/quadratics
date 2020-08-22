@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     console.log("initialX", initialX, "initialY", initialY);
     var rubberbandEl = document.querySelector("#gc-rubberband line");
     var trajectoryEl = document.querySelector("#gc-trajectory path");
-    var scaffoldSentence = document.getElementsByClassName("scaffold")[0];
+    var scaffoldContainer = document.getElementsByClassName("scaffold-container")[0];
     var isDragging = false;
     // toggle bird/slingshot drag event on mousedown/mouseup
     bird.addEventListener("mousedown", function (event) {
@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         event.preventDefault();
         console.log("trajectoryEl.getAttribute(\"d\")", trajectoryEl.getAttribute("d"));
         var birdPath = trajectoryEl.getAttribute("d");
-        trajectoryEl.classList.add("hidden");
+        // trajectoryEl.classList.add("hidden");
         // var pathMx = rubberbandEl.getAttribute("x2");
         // var pathMy = rubberbandEl.getAttribute("y2");
         // console.log("path", path, "pathMx", pathMx, "pathMy", pathMy);
@@ -95,20 +95,31 @@ document.addEventListener("DOMContentLoaded", function (event) {
         //   reverseNormalized: reverseNormalizedPath,
         //   reverse: reverseSubPath
         // };
-        // var normalizedPath = window.SVGPathEditor.normalize(birdPath);
-        // var trajectoryRetractedPath = window.SVGPathEditor.reverse(normalizedPath);
-        // trajectoryEl.style.offsetPath = `path('${trajectoryRetractedPath}')`
-        // setTimeout(function() {
+        var normalizedPath = window.SVGPathEditor.normalize(birdPath);
+        var trajectoryRetractedPath = window.SVGPathEditor.reverse(normalizedPath);
+        trajectoryEl.style.offsetPath = `path('${trajectoryRetractedPath}')`;
+        var animationDuration = 4000;
         bird.setAttribute("cx", "0");
         bird.setAttribute("cy", "0");
+        birdGroup.style.animationDuration = `${animationDuration}ms`;
+        birdGroup.style.animationTimingFunction = "ease-out";
+        birdGroup.style.animationIterationCount = "1";
+        birdGroup.style.animationFillMode = "forwards";
         birdGroup.style.offsetPath = `path('${birdPath}')`;
-        // }, 250);
-        scaffoldSentence.classList.remove("hidden");
+        // cannot change 'display' attributes while animation is in progress
+        setTimeout(function () {
+            scaffoldContainer.classList.remove("hidden");
+        }, animationDuration);
     });
     // reset activity when student clicks "Fly again?"
-    scaffoldSentence.children[0].addEventListener("click", function (event) {
+    scaffoldContainer.children[1].addEventListener("click", function (event) {
         bird.dispatchEvent(new Event("mouseup"));
         this.parentElement.classList.add("hidden");
+    });
+    // roll credits when student clicks "Roll credits"
+    scaffoldContainer.children[2].addEventListener("click", function (event) {
+        this.parentElement.classList.add("hidden");
+        document.getElementsByClassName("credits-container")[0].classList.remove("hidden");
     });
 });
 function resetSpritePosition(el, x, y) {
