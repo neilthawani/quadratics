@@ -185,9 +185,9 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
         birdGroup.style.offsetPath = `path('${birdPath}')`;
 
         // cannot change 'display' attributes while animation is in progress
-        // setTimeout(function() {
-        //     scaffoldContainer.classList.remove("hidden");
-        // }, 4000);
+        setTimeout(function() {
+            scaffoldContainer.classList.remove("hidden");
+        }, 4000);
     });
 
     // reset activity when student clicks "Fly again?"
@@ -200,6 +200,7 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
     scaffoldContainer.children[2].addEventListener("click", function(event: MouseEvent) {
         this.parentElement.classList.add("hidden");
         document.getElementsByClassName("credits-container")[0].classList.remove("hidden");
+        this.classList.add("hidden");
     });
 });
 

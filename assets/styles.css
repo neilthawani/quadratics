@@ -18,9 +18,8 @@ body {
 }
 
 .hidden {
-    display: none;
+    display: none !important;
 }
-
 
 .heading {
     color: rgb(51, 51, 51);
@@ -139,7 +138,6 @@ body {
 .credits-container .sentence {
     display: flex;
     justify-content: center;
-    transition: 0.5s all;
     animation: creditsColorChange 2s infinite;
 }
 
