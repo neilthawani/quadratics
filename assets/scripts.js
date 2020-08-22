@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     var rubberbandEl = document.querySelector("#gc-rubberband line"), rubberbandElx2 = rubberbandEl.getAttribute("x2"), rubberbandEly2 = rubberbandEl.getAttribute("y2");
     var trajectoryEl = document.querySelector("#gc-trajectory path");
     var scaffoldContainer = document.getElementsByClassName("scaffold-container")[0];
+    var creditsContainer = document.getElementsByClassName("credits-container")[0];
     var isDragging = false;
     // initialize the bird
     initializeBird(bird, 1000);
@@ -20,7 +21,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
     });
     // catch-all handler for resetting the game state
     bird.addEventListener("mouseup", function (event) {
-        console.log("mouseup");
         event.preventDefault();
         isDragging = false;
         birdGroup.style.animation = "";
@@ -101,10 +101,11 @@ document.addEventListener("DOMContentLoaded", function (event) {
     scaffoldContainer.children[1].addEventListener("click", function (event) {
         bird.dispatchEvent(new Event("mouseup"));
         this.parentElement.classList.add("hidden");
+        creditsContainer.classList.add("hidden");
     });
     // roll credits when student clicks "Roll credits"
     scaffoldContainer.children[2].addEventListener("click", function (event) {
-        document.getElementsByClassName("credits-container")[0].classList.remove("hidden");
+        creditsContainer.classList.remove("hidden");
     });
 });
 function initializeBird(bird, duration) {
@@ -152,4 +153,7 @@ function findThirdX(x0, y0, x1, y1, y2) {
     }
     var x2 = ((y2 - y0) * (x1 - x0)) / (y1 - y0) + x0;
     return x2;
+}
+function hideCredits() {
+    document.getElementsByClassName("credits-container")[0].classList.remove("hidden");
 }

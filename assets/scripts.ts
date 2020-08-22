@@ -25,6 +25,7 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
     var trajectoryEl = <SVGPathElement>document.querySelector("#gc-trajectory path");
 
     var scaffoldContainer = document.getElementsByClassName("scaffold-container")[0];
+    var creditsContainer = document.getElementsByClassName("credits-container")[0];
 
     var isDragging = false;
 
@@ -39,7 +40,6 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
 
     // catch-all handler for resetting the game state
     bird.addEventListener("mouseup", function(event: MouseEvent) {
-        console.log("mouseup");
         event.preventDefault();
 
         isDragging = false;
@@ -160,11 +160,12 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
     scaffoldContainer.children[1].addEventListener("click", function(event: MouseEvent) {
         bird.dispatchEvent(new Event("mouseup"));
         this.parentElement.classList.add("hidden");
+        creditsContainer.classList.add("hidden");
     });
 
     // roll credits when student clicks "Roll credits"
     scaffoldContainer.children[2].addEventListener("click", function(event: MouseEvent) {
-        document.getElementsByClassName("credits-container")[0].classList.remove("hidden");
+        creditsContainer.classList.remove("hidden");
     });
 });
 
@@ -223,4 +224,8 @@ function findThirdX(x0: number, y0: number, x1: number, y1: number, y2: number) 
     var x2 = ((y2 - y0) * (x1 - x0)) / (y1 - y0) + x0
 
     return x2;
+}
+
+function hideCredits() {
+    document.getElementsByClassName("credits-container")[0].classList.remove("hidden");
 }
