@@ -77,33 +77,18 @@ document.addEventListener("DOMContentLoaded", function (event) {
         if (!isDragging || !slingshotPulled || !gcBirdFlyAnimationDuration) {
             return;
         }
+        // debugger;
+        // var pathLength = Math.ceil(trajectoryEl.getTotalLength()),
+        //     birdPath = "";
+        //
+        // for (var i = 0; i <= pathLength; i++) {
+        //     if (i !== 0) {
+        //         birdPath = birdPath.concat(`L${trajectoryEl.getPointAtLength(i).x},${trajectoryEl.getPointAtLength(i).y}`);
+        //     } else {
+        //         birdPath = birdPath.concat(`M${trajectoryEl.getPointAtLength(i).x},${trajectoryEl.getPointAtLength(i).y}`);
+        //     }
+        // }
         event.preventDefault();
-        function snapSlingshot() {
-            return __awaiter(this, void 0, void 0, function* () {
-                var snappingSlingshot = rubberbandEl.parentElement.appendChild(document.createElement("line"));
-                snappingSlingshot.setAttribute("d", `M${rubberbandEl.getAttribute("x1")},${rubberbandEl.getAttribute("y1")} L${rubberbandElx2},${rubberbandEly2}`);
-                snappingSlingshot.style.strokeDasharray = "200";
-                snappingSlingshot.style.strokeDashoffset = "0";
-                snappingSlingshot.style.animation = "retractSlingshot 1s linear forwards";
-                // debugger;
-                // Developer's Note:
-                // It's pretty easy to see the bug here.
-                // Run `npm start` to start the node server,
-                // Uncomment the `debugger`, run `npm run build` in Terminal, and go to `localhost:8080`.
-                // When it hits the breakpoint, in your browser's console,
-                // print 'rubberbandEl' and then print 'snappingSlingshot.'
-                // 'rubberbandEl' (printed, and visually) contains the pulled slingshot values
-                // 'snappingSlingshot' contains x1===x2 and y1===y2
-                // Is this a race condition? Why do the `get`ted values not match the DOM values?
-                // After this is resolved, add the following to styles.css near the rubberbandEl styling:
-                // @keyframes retractSlingshot {
-                //   to {
-                //     stroke-dashoffset: 200;
-                //   }
-                // }
-                // This will visually retract the slingshot.
-            });
-        }
         function prepareToFly() {
             return __awaiter(this, void 0, void 0, function* () {
                 // send slingshot back to original position
@@ -122,8 +107,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
             birdGroup.style.animationFillMode = "forwards";
             birdGroup.style.offsetPath = `path('${birdPath}')`;
         };
-        snapSlingshot()
-            .then(prepareToFly)
+        prepareToFly()
             .then(fly)
             .then(function () {
             // cannot change 'display' attributes while animation is in progress
