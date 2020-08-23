@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     // initialize the game
     initializeSvg(svg, ground);
     initializeBird(bird, 1000);
-    var svgWidth = svg.getAttribute("width"), svgHeight = svg.getAttribute("height");
+    var svgWidth = parseInt(svg.getAttribute("width"), 10), svgHeight = parseInt(svg.getAttribute("height"), 10);
     // toggle bird/slingshot drag event on mousedown/mouseup
     bird.addEventListener("mousedown", function (event) {
         event.preventDefault();
