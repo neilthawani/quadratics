@@ -95,6 +95,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 // In your browser's console, print 'rubberbandEl' and then print 'snappingSlingshot.'
                 // 'rubberbandEl' (printed, and visually) contains the pulled slingshot values
                 // 'snappingSlingshot' contains x1===x2 and y1===y2
+                // Is this a race condition? Why do the `get`ted values not match the DOM values?
                 // After this is resolved, add the following to styles.css near the rubberbandEl styling:
                 // @keyframes retractSlingshot {
                 //   to {
