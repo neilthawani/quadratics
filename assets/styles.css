@@ -61,6 +61,13 @@ body {
     cursor: pointer;
 }
 
+@media only screen and (max-width: 788px) {
+    .btn {
+        height: max-content;
+        padding: 5px 1.2em;
+    }
+}
+
 .btn-blue {
     color: white;
     background-color: var(--blue);
@@ -100,6 +107,9 @@ body {
     50% {
         animation-timing-function: cubic-bezier(0.33333, 0.66667, 0.66667, 1);
     }
+    /* 66% {
+        animation-timing-function: cubic-bezier(0.66667, 1, 0.66667, 1);
+    } */
     100% {
         offset-distance: 100%;
     }

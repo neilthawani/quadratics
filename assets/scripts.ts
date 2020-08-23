@@ -2,18 +2,11 @@ interface CSSStyleDeclaration {
     offsetPath: string
 }
 
-// interface SVGElement {
-//     x1: any,
-//     x2: any,
-//     y1: any,
-//     y2: any,
-// }
-
 // mouse range of motion
-const xMin = 0;
-const xMax = 158; // gc-bird-obj:cx + 20
-const yMin = 0;
-const yMax = 300;
+const xMin = -12;
+const xMax = 150; // gc-bird-obj:cx + 12
+const yMin = -12;
+const yMax = 300 + 12; // svgHeight
 
 document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // DOM-ready
     // define query selectors, get related attributes
@@ -23,8 +16,8 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
 
     var birdGroup = document.getElementById("gc-bird"),
         bird = <SVGElement>birdGroup.children[1],
-        initialX = bird.getAttribute("cx"),
-        initialY = bird.getAttribute("cy");
+        initialX = <number><unknown>bird.getAttribute("cx"),
+        initialY = <number><unknown>bird.getAttribute("cy");
 
     var rubberbandEl = <SVGElement>document.querySelector("#gc-rubberband line"),
         rubberbandElx2 = rubberbandEl.getAttribute("x2"),
@@ -40,8 +33,8 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
     initializeSvg(svg, ground);
     initializeBird(bird, 1000);
 
-    var svgWidth = svg.getAttribute("width"),
-        svgHeight = svg.getAttribute("height");
+    var svgWidth = <number><unknown>svg.getAttribute("width"),
+        svgHeight = <number><unknown>svg.getAttribute("height");
 
     // toggle bird/slingshot drag event on mousedown/mouseup
     bird.addEventListener("mousedown", function(event: MouseEvent) {
@@ -67,8 +60,8 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
 
         initializeBird(bird, 1000);
 
-        svgWidth = svg.getAttribute("width"),
-        svgHeight = svg.getAttribute("height");
+        svgWidth = <number><unknown>svg.getAttribute("width"),
+        svgHeight = <number><unknown>svg.getAttribute("height");
     });
 
     // main slingshot dragging logic
@@ -105,12 +98,14 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
             // upward-facing slingshot, draw arc
             var x0 = x,
                 y0 = y,
-                [x1, y1] = findThirdPoint(parseInt(svgWidth, 10),
+                slingshotLength = Math.sqrt(Math.pow((initialX - x), 2) + Math.pow((initialY - y), 2)),
+                calculatedX2 = (slingshotLength / initialX) * svgWidth,
+                x2 = calculatedX2 < svgWidth ? calculatedX2 : svgWidth,
+                y2 = yMax - parseInt(ground.getAttribute("height"), 10),
+                [x1, y1] = findThirdPoint(x2,
                                           x0,
                                           y0,
-                                          parseInt(rubberbandEl.getAttribute("x1"), 10), parseInt(rubberbandEl.getAttribute("y1"), 10)),
-                x2 = parseInt(ground.getAttribute("width"), 10) - 2 * parseInt(bird.getAttribute("r"), 10),
-                y2 = yMax - parseInt(ground.getAttribute("height"), 10);
+                                          parseInt(rubberbandEl.getAttribute("x1"), 10), parseInt(rubberbandEl.getAttribute("y1"), 10));
 
             // downward-facing slingshot, draw straight line
             if (y0 < parseInt(rubberbandEl.getAttribute("y1"), 10)) {
@@ -124,10 +119,12 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
                 y2 = y1;
             }
 
-            drawTrajectory(trajectoryEl,
-                      x0, y0,
-                      x1, y1,
-                      x2, y2);
+            if (slingshotLength > 40) {
+                drawTrajectory(trajectoryEl,
+                          x0, y0,
+                          x1, y1,
+                          x2, y2);
+            }
         } else {
             this.dispatchEvent(new Event("mouseup"));
         }
@@ -141,32 +138,37 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
 
         event.preventDefault();
 
-        rubberbandEl.setAttribute("x2", rubberbandElx2);
-        rubberbandEl.setAttribute("y2", rubberbandEly2);
-
         var birdPath = trajectoryEl.getAttribute("d"),
-            gcBirdFlyAnimationDuration = 2000;
+            gcBirdFlyAnimationDuration = trajectoryEl.getTotalLength();
 
-        bird.setAttribute("cx", "0");
-        bird.setAttribute("cy", "0");
+        async function prepareToFly() {
+            // send retracted slingshot back to original position
+            rubberbandEl.setAttribute("x2", rubberbandElx2);
+            rubberbandEl.setAttribute("y2", rubberbandEly2);
 
-        // a bug remains where the browser thinks the slingshot is retracted, but it's not
-        // and the bird's position is also miscommunicated (cx != 0, cy != 0, as below)
-        // this might be a race condition
-        setTimeout(function() {
+            // set cx, cy to 0 so the bird can follow the trajectory path relative to the svg
+            bird.setAttribute("cx", "0");
+            bird.setAttribute("cy", "0");
+        }
+
+        var fly = function() {
             birdGroup.style.animationName = "gcBirdFly";
             birdGroup.style.animationDuration = `${gcBirdFlyAnimationDuration}ms`;
             birdGroup.style.animationTimingFunction = "ease-out";
             birdGroup.style.animationIterationCount = "1";
             birdGroup.style.animationFillMode = "forwards";
             birdGroup.style.offsetPath = `path('${birdPath}')`;
-        }, 0);
-        
-        // cannot change 'display' attributes while animation is in progress
-        // reveal the next step after the animation is over
-        setTimeout(function() {
-            scaffoldContainer.classList.remove("hidden");
-        }, gcBirdFlyAnimationDuration);
+        }
+
+        prepareToFly().then(function() {
+            fly();
+        }).then(function() {
+            // cannot change 'display' attributes while animation is in progress
+            // reveal the next step after the animation is over
+            setTimeout(function() {
+                scaffoldContainer.classList.remove("hidden");
+            }, gcBirdFlyAnimationDuration);
+        });
     });
 
     // reset activity when student clicks "Fly again?"
@@ -184,8 +186,8 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
 
 function initializeSvg(svg, ground) {
     var svgWidth = 1240;
-    if (window.innerWidth < 1240) {
-        svgWidth = window.innerWidth - 200;
+    if (window.outerWidth < 1240) {
+        svgWidth = window.outerWidth - 16;
     }
 
     svg.setAttribute("width", svgWidth);
@@ -224,8 +226,8 @@ function drawTrajectory(el, x0, y0, x1, y1, x2, y2) {
     el.setAttribute("d", `M${x0},${y0} Q${x1},${y1} ${x2},${y2}`);
 }
 
-function findThirdPoint(svgWidth: number, x0: number, y0: number, x1: number, y1: number, x2?: number, y2?: number) {
-    var x2 = x2 || svgWidth / 2;
+function findThirdPoint(predictedWidth: number, x0: number, y0: number, x1: number, y1: number, x2?: number, y2?: number) {
+    var x2 = x2 || predictedWidth / 2;
     var y2 = y2 || 0;
 
     if (x0 === x1) {

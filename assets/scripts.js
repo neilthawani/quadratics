@@ -1,14 +1,17 @@
-// interface SVGElement {
-//     x1: any,
-//     x2: any,
-//     y1: any,
-//     y2: any,
-// }
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 // mouse range of motion
-const xMin = 0;
-const xMax = 158; // gc-bird-obj:cx + 20
-const yMin = 0;
-const yMax = 300;
+const xMin = -12;
+const xMax = 150; // gc-bird-obj:cx + 12
+const yMin = -12;
+const yMax = 300 + 12; // svgHeight
 document.addEventListener("DOMContentLoaded", function (event) {
     // define query selectors, get related attributes
     var svg = document.getElementById("game-canvas");
@@ -63,7 +66,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
             // (x1, y1): trajectory coords, based on slingshot angle
             // (x2, y2): predicted target
             // upward-facing slingshot, draw arc
-            var x0 = x, y0 = y, [x1, y1] = findThirdPoint(parseInt(svgWidth, 10), x0, y0, parseInt(rubberbandEl.getAttribute("x1"), 10), parseInt(rubberbandEl.getAttribute("y1"), 10)), x2 = parseInt(ground.getAttribute("width"), 10) - 2 * parseInt(bird.getAttribute("r"), 10), y2 = yMax - parseInt(ground.getAttribute("height"), 10);
+            var x0 = x, y0 = y, slingshotLength = Math.sqrt(Math.pow((initialX - x), 2) + Math.pow((initialY - y), 2)), calculatedX2 = (slingshotLength / initialX) * svgWidth, x2 = calculatedX2 < svgWidth ? calculatedX2 : svgWidth, y2 = yMax - parseInt(ground.getAttribute("height"), 10), [x1, y1] = findThirdPoint(x2, x0, y0, parseInt(rubberbandEl.getAttribute("x1"), 10), parseInt(rubberbandEl.getAttribute("y1"), 10));
             // downward-facing slingshot, draw straight line
             if (y0 < parseInt(rubberbandEl.getAttribute("y1"), 10)) {
                 y1 = yMax - parseInt(ground.getAttribute("height"), 10);
@@ -71,7 +74,9 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 x2 = x1;
                 y2 = y1;
             }
-            drawTrajectory(trajectoryEl, x0, y0, x1, y1, x2, y2);
+            if (slingshotLength > 40) {
+                drawTrajectory(trajectoryEl, x0, y0, x1, y1, x2, y2);
+            }
         }
         else {
             this.dispatchEvent(new Event("mouseup"));
@@ -83,27 +88,46 @@ document.addEventListener("DOMContentLoaded", function (event) {
             return;
         }
         event.preventDefault();
-        rubberbandEl.setAttribute("x2", rubberbandElx2);
-        rubberbandEl.setAttribute("y2", rubberbandEly2);
-        var birdPath = trajectoryEl.getAttribute("d"), gcBirdFlyAnimationDuration = 2000;
-        bird.setAttribute("cx", "0");
-        bird.setAttribute("cy", "0");
-        // a bug remains where the browser thinks the slingshot is retracted, but it's not
-        // and the bird's position is also miscommunicated (cx != 0, cy != 0, as below)
-        // this might be a race condition
-        setTimeout(function () {
+        var birdPath = trajectoryEl.getAttribute("d"), gcBirdFlyAnimationDuration = trajectoryEl.getTotalLength();
+        function prepareToFly() {
+            return __awaiter(this, void 0, void 0, function* () {
+                console.log("prepare to fly");
+                rubberbandEl.setAttribute("x2", rubberbandElx2);
+                rubberbandEl.setAttribute("y2", rubberbandEly2);
+                bird.setAttribute("cx", "0");
+                bird.setAttribute("cy", "0");
+            });
+        }
+        var fly = function () {
             birdGroup.style.animationName = "gcBirdFly";
             birdGroup.style.animationDuration = `${gcBirdFlyAnimationDuration}ms`;
             birdGroup.style.animationTimingFunction = "ease-out";
             birdGroup.style.animationIterationCount = "1";
             birdGroup.style.animationFillMode = "forwards";
             birdGroup.style.offsetPath = `path('${birdPath}')`;
-        }, 0);
-        // cannot change 'display' attributes while animation is in progress
-        // reveal the next step after the animation is over
-        setTimeout(function () {
-            scaffoldContainer.classList.remove("hidden");
-        }, gcBirdFlyAnimationDuration);
+        };
+        prepareToFly().then(function () {
+            console.log("fly");
+            fly();
+        }).then(function () {
+            console.log("unhide scaffold");
+            // cannot change 'display' attributes while animation is in progress
+            // reveal the next step after the animation is over
+            setTimeout(function () {
+                scaffoldContainer.classList.remove("hidden");
+            }, gcBirdFlyAnimationDuration);
+        });
+        // a bug remains where the browser thinks the slingshot is retracted, but it's not
+        // and the bird's position is also miscommunicated (cx != 0, cy != 0, as below)
+        // this might be a race condition
+        // var readyToFly = parseInt(bird.getAttribute("cx"), 10) === 0 &&
+        //                   parseInt(bird.getAttribute("cy"), 10) === 0 &&
+        //                   parseInt(rubberbandEl.getAttribute("x1"), 10) === parseInt(rubberbandEl.getAttribute("x2"), 10) &&
+        //                   parseInt(rubberbandEl.getAttribute("y1"), 10) === parseInt(rubberbandEl.getAttribute("y2"), 10);
+        // if (readyToFly) {
+        //     fly();
+        // } else {
+        // }
     });
     // reset activity when student clicks "Fly again?"
     scaffoldContainer.children[1].addEventListener("click", function (event) {
@@ -118,8 +142,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
 });
 function initializeSvg(svg, ground) {
     var svgWidth = 1240;
-    if (window.innerWidth < 1240) {
-        svgWidth = window.innerWidth - 200;
+    if (window.outerWidth < 1240) {
+        svgWidth = window.outerWidth - 16;
     }
     svg.setAttribute("width", svgWidth);
     svg.setAttribute("viewBox", `0 0 ${svgWidth} 300`);
@@ -152,8 +176,8 @@ function drawTrajectory(el, x0, y0, x1, y1, x2, y2) {
     // upward-facing slingshot, draw arc
     el.setAttribute("d", `M${x0},${y0} Q${x1},${y1} ${x2},${y2}`);
 }
-function findThirdPoint(svgWidth, x0, y0, x1, y1, x2, y2) {
-    var x2 = x2 || svgWidth / 2;
+function findThirdPoint(predictedWidth, x0, y0, x1, y1, x2, y2) {
+    var x2 = x2 || predictedWidth / 2;
     var y2 = y2 || 0;
     if (x0 === x1) {
         throw new Error("Divide by zero (same input x coords)");
