@@ -22,8 +22,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     var trajectoryEl = document.querySelector("#gc-trajectory path");
     var scaffoldContainer = document.getElementsByClassName("scaffold-container")[0];
     var creditsContainer = document.getElementsByClassName("credits-container")[0];
-    // var isMousedown = false, isMousemove = false;
-    var isDragging = false; //isMousedown && isMousemove;
+    var isDragging = false;
     // initialize the game
     initializeSvg(svg, ground);
     initializeBird(bird, 1000);
@@ -51,7 +50,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
             rubberbandEl.setAttribute("x2", mouseX);
             rubberbandEl.setAttribute("y2", mouseY);
             // (x0, y0): ball/mouse coords
-            // (x1, y1): trajectory coords, based on slingshot angle
+            // (x1, y1): bezier trajectory coords, based on slingshot angle
             // (x2, y2): predicted target
             // upward-facing slingshot, draw arc
             var x0 = x, y0 = y, slingshotLength = Math.sqrt(Math.pow((initialX - x), 2) + Math.pow((initialY - y), 2)), calculatedX2 = (slingshotLength / initialX) * svgWidth, x2 = calculatedX2 < svgWidth ? calculatedX2 : svgWidth, y2 = yMax - parseInt(ground.getAttribute("height"), 10), [x1, y1] = findThirdPoint(x2, x0, y0, parseInt(rubberbandEl.getAttribute("x1"), 10), parseInt(rubberbandEl.getAttribute("y1"), 10));
@@ -92,7 +91,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 // It's pretty easy to see the bug here.
                 // Run `npm start` to start the node server,
                 // Uncomment the `debugger`, run `npm run build` in Terminal, and go to `localhost:8080`.
-                // In your browser's console, print 'rubberbandEl' and then print 'snappingSlingshot.'
+                // When it hits the breakpoint, in your browser's console,
+                // print 'rubberbandEl' and then print 'snappingSlingshot.'
                 // 'rubberbandEl' (printed, and visually) contains the pulled slingshot values
                 // 'snappingSlingshot' contains x1===x2 and y1===y2
                 // Is this a race condition? Why do the `get`ted values not match the DOM values?
@@ -102,6 +102,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 //     stroke-dashoffset: 200;
                 //   }
                 // }
+                // This will visually retract the slingshot.
             });
         }
         function prepareToFly() {

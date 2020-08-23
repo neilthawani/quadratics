@@ -27,8 +27,7 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
     var scaffoldContainer = document.getElementsByClassName("scaffold-container")[0];
     var creditsContainer = document.getElementsByClassName("credits-container")[0];
 
-    // var isMousedown = false, isMousemove = false;
-    var isDragging = false;//isMousedown && isMousemove;
+    var isDragging = false;
 
     // initialize the game
     initializeSvg(svg, ground);
@@ -72,7 +71,7 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
             rubberbandEl.setAttribute("y2", mouseY);
 
             // (x0, y0): ball/mouse coords
-            // (x1, y1): trajectory coords, based on slingshot angle
+            // (x1, y1): bezier trajectory coords, based on slingshot angle
             // (x2, y2): predicted target
 
             // upward-facing slingshot, draw arc
@@ -137,9 +136,12 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
             // It's pretty easy to see the bug here.
             // Run `npm start` to start the node server,
             // Uncomment the `debugger`, run `npm run build` in Terminal, and go to `localhost:8080`.
-            // In your browser's console, print 'rubberbandEl' and then print 'snappingSlingshot.'
+            // When it hits the breakpoint, in your browser's console,
+            // print 'rubberbandEl' and then print 'snappingSlingshot.'
+
             // 'rubberbandEl' (printed, and visually) contains the pulled slingshot values
             // 'snappingSlingshot' contains x1===x2 and y1===y2
+
             // Is this a race condition? Why do the `get`ted values not match the DOM values?
 
             // After this is resolved, add the following to styles.css near the rubberbandEl styling:
@@ -148,6 +150,7 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
             //     stroke-dashoffset: 200;
             //   }
             // }
+            // This will visually retract the slingshot.
         }
 
         async function prepareToFly() {
