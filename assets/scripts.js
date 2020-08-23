@@ -31,23 +31,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
         event.preventDefault();
         isDragging = true;
     });
-    // catch-all handler for resetting the game state
-    bird.addEventListener("mouseup", function (event) {
-        event.preventDefault();
-        if (!scaffoldContainer.classList.contains("hidden")) {
-            return;
-        }
-        isDragging = false;
-        initializeSvg(svg, ground);
-        birdGroup.style.animation = "";
-        birdGroup.style.offsetPath = "";
-        resetSpritePosition(bird, { "cx": initialX }, { "cy": initialY });
-        resetSpritePosition(rubberbandEl, { "x2": rubberbandEl.getAttribute("x1") }, { "y2": rubberbandEl.getAttribute("y1") });
-        drawTrajectory(trajectoryEl, 0, 0, 0, 0, 0, 0);
-        initializeBird(bird, 1000);
-        svgWidth = svg.getAttribute("width"),
-            svgHeight = svg.getAttribute("height");
-    });
     // main slingshot dragging logic
     bird.addEventListener("mousemove", function (event) {
         if (!isDragging) {
@@ -82,7 +65,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
             }
         }
         else {
-            this.dispatchEvent(new Event("mouseup"));
+            resetGameState();
         }
     });
     // let the bird fly
@@ -102,7 +85,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 // debugger;
                 // Developer's Note:
                 // It's pretty easy to see the bug here.
-                // Uncomment the `debugger`, run `npm run build` in Terminal, and have `node server.js` running.
+                // Run `npm start` to start the node server,
+                // Uncomment the `debugger`, run `npm run build` in Terminal, and go to `localhost:8080`.
                 // In your browser's console, print 'rubberbandEl' and then print 'snappingSlingshot.'
                 // 'rubberbandEl' (printed, and visually) contains the pulled slingshot values
                 // 'snappingSlingshot' contains x1===x2 and y1===y2
@@ -148,12 +132,27 @@ document.addEventListener("DOMContentLoaded", function (event) {
     scaffoldContainer.children[1].addEventListener("click", function (event) {
         this.parentElement.classList.add("hidden");
         creditsContainer.classList.add("hidden");
-        bird.dispatchEvent(new Event("mouseup"));
+        resetGameState();
     });
     // roll credits when student clicks "Roll credits"
     scaffoldContainer.children[2].addEventListener("click", function (event) {
         creditsContainer.classList.remove("hidden");
     });
+    function resetGameState() {
+        if (!scaffoldContainer.classList.contains("hidden")) {
+            return;
+        }
+        isDragging = false;
+        initializeSvg(svg, ground);
+        birdGroup.style.animation = "";
+        birdGroup.style.offsetPath = "";
+        resetSpritePosition(bird, { "cx": initialX }, { "cy": initialY });
+        resetSpritePosition(rubberbandEl, { "x2": rubberbandEl.getAttribute("x1") }, { "y2": rubberbandEl.getAttribute("y1") });
+        drawTrajectory(trajectoryEl, 0, 0, 0, 0, 0, 0);
+        initializeBird(bird, 1000);
+        svgWidth = svg.getAttribute("width"),
+            svgHeight = svg.getAttribute("height");
+    }
 });
 function initializeSvg(svg, ground) {
     var svgWidth = 1240;
