@@ -92,9 +92,10 @@ document.addEventListener("DOMContentLoaded", function (event) {
         var birdPath = trajectoryEl.getAttribute("d"), gcBirdFlyAnimationDuration = trajectoryEl.getTotalLength();
         function prepareToFly() {
             return __awaiter(this, void 0, void 0, function* () {
-                console.log("prepare to fly");
+                // send retracted slingshot back to original position
                 rubberbandEl.setAttribute("x2", rubberbandElx2);
                 rubberbandEl.setAttribute("y2", rubberbandEly2);
+                // set cx, cy to 0 so the bird can follow the trajectory path relative to the svg
                 bird.setAttribute("cx", "0");
                 bird.setAttribute("cy", "0");
             });
@@ -108,27 +109,14 @@ document.addEventListener("DOMContentLoaded", function (event) {
             birdGroup.style.offsetPath = `path('${birdPath}')`;
         };
         prepareToFly().then(function () {
-            console.log("fly");
             fly();
         }).then(function () {
-            console.log("unhide scaffold");
             // cannot change 'display' attributes while animation is in progress
             // reveal the next step after the animation is over
             setTimeout(function () {
                 scaffoldContainer.classList.remove("hidden");
             }, gcBirdFlyAnimationDuration);
         });
-        // a bug remains where the browser thinks the slingshot is retracted, but it's not
-        // and the bird's position is also miscommunicated (cx != 0, cy != 0, as below)
-        // this might be a race condition
-        // var readyToFly = parseInt(bird.getAttribute("cx"), 10) === 0 &&
-        //                   parseInt(bird.getAttribute("cy"), 10) === 0 &&
-        //                   parseInt(rubberbandEl.getAttribute("x1"), 10) === parseInt(rubberbandEl.getAttribute("x2"), 10) &&
-        //                   parseInt(rubberbandEl.getAttribute("y1"), 10) === parseInt(rubberbandEl.getAttribute("y2"), 10);
-        // if (readyToFly) {
-        //     fly();
-        // } else {
-        // }
     });
     // reset activity when student clicks "Fly again?"
     scaffoldContainer.children[1].addEventListener("click", function (event) {
