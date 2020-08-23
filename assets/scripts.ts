@@ -251,7 +251,3 @@ function findThirdX(x0: number, y0: number, x1: number, y1: number, y2: number) 
 
     return x2;
 }
-
-function hideCredits() {
-    document.getElementsByClassName("credits-container")[0].classList.remove("hidden");
-}
