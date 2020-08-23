@@ -75,12 +75,11 @@ document.addEventListener("DOMContentLoaded", function (event) {
         var slingshotPulled = (parseInt(rubberbandEl.getAttribute("x1"), 10) !==
             parseInt(rubberbandEl.getAttribute("x2"), 10)) &&
             (parseInt(rubberbandEl.getAttribute("y1"), 10) !==
-                parseInt(rubberbandEl.getAttribute("y2"), 10));
-        if (!isDragging || !slingshotPulled) {
+                parseInt(rubberbandEl.getAttribute("y2"), 10)), birdPath = trajectoryEl.getAttribute("d"), gcBirdFlyAnimationDuration = trajectoryEl.getTotalLength();
+        if (!isDragging || !slingshotPulled || !gcBirdFlyAnimationDuration) {
             return;
         }
         event.preventDefault();
-        var birdPath = trajectoryEl.getAttribute("d"), gcBirdFlyAnimationDuration = trajectoryEl.getTotalLength();
         function snapSlingshot() {
             return __awaiter(this, void 0, void 0, function* () {
                 var snappingSlingshot = rubberbandEl.parentElement.appendChild(document.createElement("line"));
@@ -124,9 +123,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
         };
         snapSlingshot()
             .then(prepareToFly)
+            .then(fly)
             .then(function () {
-            fly();
-        }).then(function () {
             // cannot change 'display' attributes while animation is in progress
             // reveal the next step after the animation is over
             setTimeout(function () {
