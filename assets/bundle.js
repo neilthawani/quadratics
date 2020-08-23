@@ -86,53 +86,12 @@ document.addEventListener("DOMContentLoaded", function (event) {
         event.preventDefault();
         rubberbandEl.setAttribute("x2", rubberbandElx2);
         rubberbandEl.setAttribute("y2", rubberbandEly2);
-        // console.log("rubberbandEl.x1", rubberbandEl.getAttribute("x1"));
-        // console.log("rubberbandEl.y1", rubberbandEl.getAttribute("y1"));
-        // console.log("rubberbandEl.x2", rubberbandEl.getAttribute("x2"));
-        // console.log("rubberbandEl.y2", rubberbandEl.getAttribute("y2"));
-        // console.log("new rubberbandEl.x1", document.querySelector("#gc-rubberband line").getAttribute("x1"));
-        // console.log("new rubberbandEl.y1", document.querySelector("#gc-rubberband line").getAttribute("y1"));
-        // console.log("new rubberbandEl.x2", document.querySelector("#gc-rubberband line").getAttribute("x2"));
-        // console.log("new rubberbandEl.y2", document.querySelector("#gc-rubberband line").getAttribute("y2"));
-        // rubberbandEl.getAttribute("x1"), rubberbandEl.getAttribute("x2")
-        // rubberbandEl.getAttribute("y1"), rubberbandEl.getAttribute("y2")
-        // a bug remains where the browser thinks the slingshot is retracted, but it's not
-        // and the bird's position is also miscommunicated (cx != 0, cy != 0, as below)
         var birdPath = trajectoryEl.getAttribute("d"), gcBirdFlyAnimationDuration = 2000;
-        // console.log("birdGroup", document.getElementById("gc-bird"));
-        // console.log("bird", <SVGElement>document.getElementById("gc-bird").children[1]);
-        // console.log("rubberbandEl", <SVGElement>document.querySelector("#gc-rubberband line"));
-        // var testRubberbandEl = <SVGElement>document.querySelector("#gc-rubberband line");
-        // console.log("testRubberbandEl", testRubberbandEl);
-        // debugger;
-        // console.log("testRubberbandEl.x1", testRubberbandEl.getAttribute("x1"), testRubberbandEl.x1.baseVal.value);
-        // console.log("testRubberbandEl.x2", testRubberbandEl.getAttribute("x2"), testRubberbandEl.x2.baseVal.value);
-        // console.log("testRubberbandEl.y1", testRubberbandEl.getAttribute("y1"), testRubberbandEl.y1.baseVal.value);
-        // console.log("testRubberbandEl.y2", testRubberbandEl.getAttribute("y2"), testRubberbandEl.y2.baseVal.value);
-        // var birdGroup = document.getElementById("gc-bird"),
-        //     bird = <SVGElement>document.getElementById("gc-bird").children[1],
-        //     initialX = bird.getAttribute("cx"),
-        //     initialY = bird.getAttribute("cy");
-        //
-        // var rubberbandEl = <SVGElement>document.querySelector("#gc-rubberband line"),
-        // bird.remove();
-        // var newBird = birdGroup.appendChild(document.createElement("circle"));
-        // newBird.setAttribute("id", "gc-bird-obj");
-        // newBird.setAttribute("cx", initialX);
-        // newBird.setAttribute("cy", initialY);
-        // newBird.setAttribute("r", "12");
-        // newBird.style.fill = "#cd0e66";
-        // newBird.style.stroke = "#F6700F";
-        // newBird.style.zIndex = "9999";
-        // bird = <SVGElement><unknown>newBird;
         bird.setAttribute("cx", "0");
         bird.setAttribute("cy", "0");
-        // console.log("bird.cx", bird.getAttribute("cx"));
-        // console.log("bird.cy", bird.getAttribute("cy"));
-        // console.log("elements");
-        // console.log("birdGroup", birdGroup);
-        // console.log("bird", bird);
-        // console.log("rubberbandEl", rubberbandEl);
+        // a bug remains where the browser thinks the slingshot is retracted, but it's not
+        // and the bird's position is also miscommunicated (cx != 0, cy != 0, as below)
+        // this might be a race condition
         setTimeout(function () {
             birdGroup.style.animationName = "gcBirdFly";
             birdGroup.style.animationDuration = `${gcBirdFlyAnimationDuration}ms`;
@@ -140,7 +99,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
             birdGroup.style.animationIterationCount = "1";
             birdGroup.style.animationFillMode = "forwards";
             birdGroup.style.offsetPath = `path('${birdPath}')`;
-        }, 10);
+        }, 0);
         // cannot change 'display' attributes while animation is in progress
         // reveal the next step after the animation is over
         setTimeout(function () {
