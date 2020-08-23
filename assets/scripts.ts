@@ -27,7 +27,8 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
     var scaffoldContainer = document.getElementsByClassName("scaffold-container")[0];
     var creditsContainer = document.getElementsByClassName("credits-container")[0];
 
-    var isDragging = false;
+    // var isMousedown = false, isMousemove = false;
+    var isDragging = false;//isMousedown && isMousemove;
 
     // initialize the game
     initializeSvg(svg, ground);
@@ -35,6 +36,28 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
 
     var svgWidth = <number><unknown>svg.getAttribute("width"),
         svgHeight = <number><unknown>svg.getAttribute("height");
+
+    bird.addEventListener("focus", function(event: MouseEvent) {
+        console.log("focus");
+    });
+    bird.addEventListener("blur", function(event: MouseEvent) {
+        console.log("blur");
+    });
+    bird.addEventListener("focusin", function(event: MouseEvent) {
+        console.log("focusin");
+    });
+    bird.addEventListener("focusout", function(event: MouseEvent) {
+        console.log("focusout");
+    });
+    bird.addEventListener("dragstart", function(event: MouseEvent) {
+        console.log("dragstart");
+    });
+    bird.addEventListener("drag", function(event: MouseEvent) {
+        console.log("drag");
+    });
+    bird.addEventListener("dragend", function(event: MouseEvent) {
+        console.log("dragend");
+    });
 
     // toggle bird/slingshot drag event on mousedown/mouseup
     bird.addEventListener("mousedown", function(event: MouseEvent) {
@@ -111,7 +134,11 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
 
     // let the bird fly
     svg.addEventListener("click", function(event: MouseEvent) {
-        if (!isDragging) {
+        var slingshotPulled = (parseInt(rubberbandEl.getAttribute("x1"), 10) !==
+                              parseInt(rubberbandEl.getAttribute("x2"), 10)) &&
+                              (parseInt(rubberbandEl.getAttribute("y1"), 10) !==
+                              parseInt(rubberbandEl.getAttribute("y2"), 10))
+        if (!isDragging || !slingshotPulled) {
             return;
         }
 

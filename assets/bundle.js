@@ -22,11 +22,33 @@ document.addEventListener("DOMContentLoaded", function (event) {
     var trajectoryEl = document.querySelector("#gc-trajectory path");
     var scaffoldContainer = document.getElementsByClassName("scaffold-container")[0];
     var creditsContainer = document.getElementsByClassName("credits-container")[0];
-    var isDragging = false;
+    // var isMousedown = false, isMousemove = false;
+    var isDragging = false; //isMousedown && isMousemove;
     // initialize the game
     initializeSvg(svg, ground);
     initializeBird(bird, 1000);
     var svgWidth = svg.getAttribute("width"), svgHeight = svg.getAttribute("height");
+    bird.addEventListener("focus", function (event) {
+        console.log("focus");
+    });
+    bird.addEventListener("blur", function (event) {
+        console.log("blur");
+    });
+    bird.addEventListener("focusin", function (event) {
+        console.log("focusin");
+    });
+    bird.addEventListener("focusout", function (event) {
+        console.log("focusout");
+    });
+    bird.addEventListener("dragstart", function (event) {
+        console.log("dragstart");
+    });
+    bird.addEventListener("drag", function (event) {
+        console.log("drag");
+    });
+    bird.addEventListener("dragend", function (event) {
+        console.log("dragend");
+    });
     // toggle bird/slingshot drag event on mousedown/mouseup
     bird.addEventListener("mousedown", function (event) {
         event.preventDefault();
@@ -71,7 +93,11 @@ document.addEventListener("DOMContentLoaded", function (event) {
     });
     // let the bird fly
     svg.addEventListener("click", function (event) {
-        if (!isDragging) {
+        var slingshotPulled = (parseInt(rubberbandEl.getAttribute("x1"), 10) !==
+            parseInt(rubberbandEl.getAttribute("x2"), 10)) &&
+            (parseInt(rubberbandEl.getAttribute("y1"), 10) !==
+                parseInt(rubberbandEl.getAttribute("y2"), 10));
+        if (!isDragging || !slingshotPulled) {
             return;
         }
         event.preventDefault();
