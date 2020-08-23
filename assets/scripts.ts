@@ -39,12 +39,17 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
     // toggle bird/slingshot drag event on mousedown/mouseup
     bird.addEventListener("mousedown", function(event: MouseEvent) {
         event.preventDefault();
+
         isDragging = true;
     });
 
     // catch-all handler for resetting the game state
     bird.addEventListener("mouseup", function(event: MouseEvent) {
         event.preventDefault();
+
+        if (!scaffoldContainer.classList.contains("hidden")) {
+            return;
+        }
 
         isDragging = false;
 
@@ -171,8 +176,6 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
             // set cx, cy to 0 so the bird can follow the trajectory path relative to the svg
             bird.setAttribute("cx", "0");
             bird.setAttribute("cy", "0");
-
-            isDragging = false;
         }
 
         var fly = function() {
@@ -199,9 +202,9 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
 
     // reset activity when student clicks "Fly again?"
     scaffoldContainer.children[1].addEventListener("click", function(event: MouseEvent) {
-        bird.dispatchEvent(new Event("mouseup"));
         this.parentElement.classList.add("hidden");
         creditsContainer.classList.add("hidden");
+        bird.dispatchEvent(new Event("mouseup"));
     });
 
     // roll credits when student clicks "Roll credits"

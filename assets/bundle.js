@@ -35,6 +35,9 @@ document.addEventListener("DOMContentLoaded", function (event) {
     // catch-all handler for resetting the game state
     bird.addEventListener("mouseup", function (event) {
         event.preventDefault();
+        if (!scaffoldContainer.classList.contains("hidden")) {
+            return;
+        }
         isDragging = false;
         initializeSvg(svg, ground);
         birdGroup.style.animation = "";
@@ -119,7 +122,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 // set cx, cy to 0 so the bird can follow the trajectory path relative to the svg
                 bird.setAttribute("cx", "0");
                 bird.setAttribute("cy", "0");
-                isDragging = false;
             });
         }
         var fly = function () {
@@ -144,9 +146,9 @@ document.addEventListener("DOMContentLoaded", function (event) {
     });
     // reset activity when student clicks "Fly again?"
     scaffoldContainer.children[1].addEventListener("click", function (event) {
-        bird.dispatchEvent(new Event("mouseup"));
         this.parentElement.classList.add("hidden");
         creditsContainer.classList.add("hidden");
+        bird.dispatchEvent(new Event("mouseup"));
     });
     // roll credits when student clicks "Roll credits"
     scaffoldContainer.children[2].addEventListener("click", function (event) {
