@@ -1,3 +1,9 @@
+// interface SVGElement {
+//     x1: any,
+//     x2: any,
+//     y1: any,
+//     y2: any,
+// }
 // mouse range of motion
 const xMin = 0;
 const xMax = 158; // gc-bird-obj:cx + 20
@@ -57,7 +63,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
             // (x1, y1): trajectory coords, based on slingshot angle
             // (x2, y2): predicted target
             // upward-facing slingshot, draw arc
-            var x0 = x, y0 = y, [x1, y1] = findThirdPoint(x0, y0, parseInt(rubberbandEl.getAttribute("x1"), 10), parseInt(rubberbandEl.getAttribute("y1"), 10)), x2 = parseInt(ground.getAttribute("width"), 10) - 2 * parseInt(bird.getAttribute("r"), 10), y2 = yMax - parseInt(ground.getAttribute("height"), 10);
+            var x0 = x, y0 = y, [x1, y1] = findThirdPoint(parseInt(svgWidth, 10), x0, y0, parseInt(rubberbandEl.getAttribute("x1"), 10), parseInt(rubberbandEl.getAttribute("y1"), 10)), x2 = parseInt(ground.getAttribute("width"), 10) - 2 * parseInt(bird.getAttribute("r"), 10), y2 = yMax - parseInt(ground.getAttribute("height"), 10);
             // downward-facing slingshot, draw straight line
             if (y0 < parseInt(rubberbandEl.getAttribute("y1"), 10)) {
                 y1 = yMax - parseInt(ground.getAttribute("height"), 10);
@@ -79,37 +85,66 @@ document.addEventListener("DOMContentLoaded", function (event) {
         event.preventDefault();
         rubberbandEl.setAttribute("x2", rubberbandElx2);
         rubberbandEl.setAttribute("y2", rubberbandEly2);
-        // only animate if the slingshot is retracted
-        // this is a visual cue to indicate the click event was sent correctly
-        // otherwise it's a false click caused by the user's mouse touchpad
-        // rubberbandEl = document.querySelector("#gc-rubberband line");
-        // console.log("rubberbandEl", rubberbandEl);
-        // if (document.querySelector("#gc-rubberband line").getAttribute("x1") === document.querySelector("#gc-rubberband line").getAttribute("x2") &&
-        //     document.querySelector("#gc-rubberband line").getAttribute("y1") === document.querySelector("#gc-rubberband line").getAttribute("y2")) {
-        // debugger;
-        // var rubberbandEl = document.querySelector("#gc-rubberband line");
-        // console.log("x1", document.querySelector("#gc-rubberband line").getAttribute("x1"));
-        // console.log("x2", document.querySelector("#gc-rubberband line").getAttribute("x2"));
-        // console.log("y1", document.querySelector("#gc-rubberband line").getAttribute("y1"));
-        // console.log("y2", document.querySelector("#gc-rubberband line").getAttribute("y2"));
+        // console.log("rubberbandEl.x1", rubberbandEl.getAttribute("x1"));
+        // console.log("rubberbandEl.y1", rubberbandEl.getAttribute("y1"));
+        // console.log("rubberbandEl.x2", rubberbandEl.getAttribute("x2"));
+        // console.log("rubberbandEl.y2", rubberbandEl.getAttribute("y2"));
+        // console.log("new rubberbandEl.x1", document.querySelector("#gc-rubberband line").getAttribute("x1"));
+        // console.log("new rubberbandEl.y1", document.querySelector("#gc-rubberband line").getAttribute("y1"));
+        // console.log("new rubberbandEl.x2", document.querySelector("#gc-rubberband line").getAttribute("x2"));
+        // console.log("new rubberbandEl.y2", document.querySelector("#gc-rubberband line").getAttribute("y2"));
+        // rubberbandEl.getAttribute("x1"), rubberbandEl.getAttribute("x2")
+        // rubberbandEl.getAttribute("y1"), rubberbandEl.getAttribute("y2")
+        // a bug remains where the browser thinks the slingshot is retracted, but it's not
+        // and the bird's position is also miscommunicated (cx != 0, cy != 0, as below)
         var birdPath = trajectoryEl.getAttribute("d"), gcBirdFlyAnimationDuration = 2000;
+        // console.log("birdGroup", document.getElementById("gc-bird"));
+        // console.log("bird", <SVGElement>document.getElementById("gc-bird").children[1]);
+        // console.log("rubberbandEl", <SVGElement>document.querySelector("#gc-rubberband line"));
+        // var testRubberbandEl = <SVGElement>document.querySelector("#gc-rubberband line");
+        // console.log("testRubberbandEl", testRubberbandEl);
+        // debugger;
+        // console.log("testRubberbandEl.x1", testRubberbandEl.getAttribute("x1"), testRubberbandEl.x1.baseVal.value);
+        // console.log("testRubberbandEl.x2", testRubberbandEl.getAttribute("x2"), testRubberbandEl.x2.baseVal.value);
+        // console.log("testRubberbandEl.y1", testRubberbandEl.getAttribute("y1"), testRubberbandEl.y1.baseVal.value);
+        // console.log("testRubberbandEl.y2", testRubberbandEl.getAttribute("y2"), testRubberbandEl.y2.baseVal.value);
+        // var birdGroup = document.getElementById("gc-bird"),
+        //     bird = <SVGElement>document.getElementById("gc-bird").children[1],
+        //     initialX = bird.getAttribute("cx"),
+        //     initialY = bird.getAttribute("cy");
+        //
+        // var rubberbandEl = <SVGElement>document.querySelector("#gc-rubberband line"),
+        // bird.remove();
+        // var newBird = birdGroup.appendChild(document.createElement("circle"));
+        // newBird.setAttribute("id", "gc-bird-obj");
+        // newBird.setAttribute("cx", initialX);
+        // newBird.setAttribute("cy", initialY);
+        // newBird.setAttribute("r", "12");
+        // newBird.style.fill = "#cd0e66";
+        // newBird.style.stroke = "#F6700F";
+        // newBird.style.zIndex = "9999";
+        // bird = <SVGElement><unknown>newBird;
         bird.setAttribute("cx", "0");
         bird.setAttribute("cy", "0");
-        birdGroup.style.animationName = "gcBirdFly";
-        birdGroup.style.animationDuration = `${gcBirdFlyAnimationDuration}ms`;
-        birdGroup.style.animationTimingFunction = "ease-out";
-        birdGroup.style.animationIterationCount = "1";
-        birdGroup.style.animationFillMode = "forwards";
-        birdGroup.style.offsetPath = `path('${birdPath}')`;
+        // console.log("bird.cx", bird.getAttribute("cx"));
+        // console.log("bird.cy", bird.getAttribute("cy"));
+        // console.log("elements");
+        // console.log("birdGroup", birdGroup);
+        // console.log("bird", bird);
+        // console.log("rubberbandEl", rubberbandEl);
+        setTimeout(function () {
+            birdGroup.style.animationName = "gcBirdFly";
+            birdGroup.style.animationDuration = `${gcBirdFlyAnimationDuration}ms`;
+            birdGroup.style.animationTimingFunction = "ease-out";
+            birdGroup.style.animationIterationCount = "1";
+            birdGroup.style.animationFillMode = "forwards";
+            birdGroup.style.offsetPath = `path('${birdPath}')`;
+        }, 10);
         // cannot change 'display' attributes while animation is in progress
         // reveal the next step after the animation is over
         setTimeout(function () {
             scaffoldContainer.classList.remove("hidden");
         }, gcBirdFlyAnimationDuration);
-        // } else {
-        //     console.log("dispatchEvent");
-        //     bird.dispatchEvent(new Event("mouseup"));
-        // }
     });
     // reset activity when student clicks "Fly again?"
     scaffoldContainer.children[1].addEventListener("click", function (event) {
@@ -158,8 +193,8 @@ function drawTrajectory(el, x0, y0, x1, y1, x2, y2) {
     // upward-facing slingshot, draw arc
     el.setAttribute("d", `M${x0},${y0} Q${x1},${y1} ${x2},${y2}`);
 }
-function findThirdPoint(x0, y0, x1, y1, x2, y2) {
-    var x2 = x2 || 620;
+function findThirdPoint(svgWidth, x0, y0, x1, y1, x2, y2) {
+    var x2 = x2 || svgWidth / 2;
     var y2 = y2 || 0;
     if (x0 === x1) {
         throw new Error("Divide by zero (same input x coords)");
