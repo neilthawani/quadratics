@@ -16,8 +16,8 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
 
     var birdGroup = document.getElementById("gc-bird"),
         bird = <SVGElement>birdGroup.children[1],
-        initialX = <number><unknown>bird.getAttribute("cx"),
-        initialY = <number><unknown>bird.getAttribute("cy");
+        initialX = parseInt(bird.getAttribute("cx"), 10),
+        initialY = parseInt(bird.getAttribute("cy"), 10);
 
     var rubberbandEl = <SVGElement>document.querySelector("#gc-rubberband line"),
         rubberbandElx2 = rubberbandEl.getAttribute("x2"),
@@ -212,8 +212,8 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
 
         initializeBird(bird, 1000);
 
-        svgWidth = <number><unknown>svg.getAttribute("width"),
-        svgHeight = <number><unknown>svg.getAttribute("height");
+        svgWidth = parseInt(svg.getAttribute("width"), 10),
+        svgHeight = parseInt(svg.getAttribute("height"), 10);
     }
 });
 

@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     // define query selectors, get related attributes
     var svg = document.getElementById("game-canvas");
     var ground = document.querySelector("#gc-ground rect");
-    var birdGroup = document.getElementById("gc-bird"), bird = birdGroup.children[1], initialX = bird.getAttribute("cx"), initialY = bird.getAttribute("cy");
+    var birdGroup = document.getElementById("gc-bird"), bird = birdGroup.children[1], initialX = parseInt(bird.getAttribute("cx"), 10), initialY = parseInt(bird.getAttribute("cy"), 10);
     var rubberbandEl = document.querySelector("#gc-rubberband line"), rubberbandElx2 = rubberbandEl.getAttribute("x2"), rubberbandEly2 = rubberbandEl.getAttribute("y2");
     var trajectoryEl = document.querySelector("#gc-trajectory path");
     var scaffoldContainer = document.getElementsByClassName("scaffold-container")[0];
@@ -155,8 +155,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
         resetSpritePosition(rubberbandEl, { "x2": rubberbandEl.getAttribute("x1") }, { "y2": rubberbandEl.getAttribute("y1") });
         drawTrajectory(trajectoryEl, 0, 0, 0, 0, 0, 0);
         initializeBird(bird, 1000);
-        svgWidth = svg.getAttribute("width"),
-            svgHeight = svg.getAttribute("height");
+        svgWidth = parseInt(svg.getAttribute("width"), 10),
+            svgHeight = parseInt(svg.getAttribute("height"), 10);
     }
 });
 function initializeSvg(svg, ground) {
