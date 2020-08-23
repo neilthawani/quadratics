@@ -81,17 +81,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
         if (!isDragging || !slingshotPulled || !gcBirdFlyAnimationDuration) {
             return;
         }
-        event.preventDefault();
-        function prepareToFly() {
-            return __awaiter(this, void 0, void 0, function* () {
-                // send slingshot back to original position
-                rubberbandEl.setAttribute("x2", rubberbandElx2);
-                rubberbandEl.setAttribute("y2", rubberbandEly2);
-                // set cx, cy to 0 so the bird can follow the trajectory path relative to the svg
-                bird.setAttribute("cx", "0");
-                bird.setAttribute("cy", "0");
-            });
-        }
         var fly = function () {
             birdGroup.style.animationName = "gcBirdFly";
             birdGroup.style.animationDuration = `${gcBirdFlyAnimationDuration}ms`;
@@ -109,6 +98,28 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 scaffoldContainer.classList.remove("hidden");
             }, gcBirdFlyAnimationDuration);
         });
+    });
+    function prepareToFly() {
+        return __awaiter(this, void 0, void 0, function* () {
+            // send slingshot back to original position
+            rubberbandEl.setAttribute("x2", rubberbandElx2);
+            rubberbandEl.setAttribute("y2", rubberbandEly2);
+            // set cx, cy to 0 so the bird can follow the trajectory path relative to the svg
+            bird.setAttribute("cx", "0");
+            bird.setAttribute("cy", "0");
+        });
+    }
+    // race condition catch - sometimes cx/cy aren't updated in time for the animation
+    // this prevents that bug from occurring
+    svg.addEventListener("animationstart", function (event) {
+        if (event.animationName !== "gcBirdFly") {
+            return;
+        }
+        var birdObjHtml = event.path[0].outerHTML, circleTag = birdObjHtml.substring(birdObjHtml.indexOf("<circle"), birdObjHtml.indexOf("</circle>")), cxIs0 = circleTag.includes('cx="0"'), cyIs0 = circleTag.includes('cx="0"'), birdPath = trajectoryEl.getAttribute("d");
+        if (!(cxIs0 && cyIs0)) {
+            prepareToFly();
+            birdGroup.style.offsetPath = `path('${birdPath}')`;
+        }
     });
     // reset activity when student clicks "Fly again?"
     scaffoldContainer.children[1].addEventListener("click", function (event) {
