@@ -98,11 +98,13 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
                 y2 = y1;
             }
 
-            if (slingshotLength > 40) {
+            if (slingshotLength > 30) {
                 drawTrajectory(trajectoryEl,
                           x0, y0,
                           x1, y1,
                           x2, y2);
+            } else if (slingshotLength <= 30) {
+                drawTrajectory(trajectoryEl, 0, 0, 0, 0, 0, 0);
             }
         } else {
             resetGameState();
@@ -121,18 +123,6 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
         if (!isDragging || !slingshotPulled || !gcBirdFlyAnimationDuration) {
             return;
         }
-
-        // debugger;
-        // var pathLength = Math.ceil(trajectoryEl.getTotalLength()),
-        //     birdPath = "";
-        //
-        // for (var i = 0; i <= pathLength; i++) {
-        //     if (i !== 0) {
-        //         birdPath = birdPath.concat(`L${trajectoryEl.getPointAtLength(i).x},${trajectoryEl.getPointAtLength(i).y}`);
-        //     } else {
-        //         birdPath = birdPath.concat(`M${trajectoryEl.getPointAtLength(i).x},${trajectoryEl.getPointAtLength(i).y}`);
-        //     }
-        // }
 
         event.preventDefault();
 
