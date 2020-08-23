@@ -10,9 +10,9 @@ const yMax = 300;
 
 document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // DOM-ready
     // define query selectors, get related attributes
-    var svg = document.getElementById("game-canvas"),
-        svgWidth = svg.getAttribute("width"),
-        svgHeight = svg.getAttribute("height");
+    var svg = document.getElementById("game-canvas");
+
+    var ground = <SVGElement>document.querySelector("#gc-ground rect");
 
     var birdGroup = document.getElementById("gc-bird"),
         bird = <SVGElement>birdGroup.children[1],
@@ -29,8 +29,12 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
 
     var isDragging = false;
 
-    // initialize the bird
+    // initialize the game
+    initializeSvg(svg, ground);
     initializeBird(bird, 1000);
+
+    var svgWidth = svg.getAttribute("width"),
+        svgHeight = svg.getAttribute("height");
 
     // toggle bird/slingshot drag event on mousedown/mouseup
     bird.addEventListener("mousedown", function(event: MouseEvent) {
@@ -44,6 +48,8 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
 
         isDragging = false;
 
+        initializeSvg(svg, ground);
+
         birdGroup.style.animation = "";
         birdGroup.style.offsetPath = "";
         resetSpritePosition(bird, {"cx": initialX}, {"cy": initialY});
@@ -53,6 +59,9 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
         drawTrajectory(trajectoryEl, 0, 0, 0, 0, 0, 0);
 
         initializeBird(bird, 1000);
+
+        svgWidth = svg.getAttribute("width"),
+        svgHeight = svg.getAttribute("height");
     });
 
     // main slingshot dragging logic
@@ -92,12 +101,12 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
                 [x1, y1] = findThirdPoint(x0,
                                           y0,
                                           parseInt(rubberbandEl.getAttribute("x1"), 10), parseInt(rubberbandEl.getAttribute("y1"), 10)),
-                x2 = parseInt(document.getElementById("gc-ground").children[1].getAttribute("width"), 10) - 2 * parseInt(bird.getAttribute("r"), 10),
-                y2 = yMax - parseInt(document.getElementById("gc-ground").children[1].getAttribute("height"), 10);
+                x2 = parseInt(ground.getAttribute("width"), 10) - 2 * parseInt(bird.getAttribute("r"), 10),
+                y2 = yMax - parseInt(ground.getAttribute("height"), 10);
 
             // downward-facing slingshot, draw straight line
             if (y0 < parseInt(rubberbandEl.getAttribute("y1"), 10)) {
-                y1 = yMax - parseInt(document.getElementById("gc-ground").children[1].getAttribute("height"), 10);
+                y1 = yMax - parseInt(ground.getAttribute("height"), 10);
                 x1 = findThirdX(x0,
                                 y0,
                                 parseInt(rubberbandEl.getAttribute("x1"), 10),
@@ -130,8 +139,17 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
         // only animate if the slingshot is retracted
         // this is a visual cue to indicate the click event was sent correctly
         // otherwise it's a false click caused by the user's mouse touchpad
-        if (rubberbandEl.getAttribute("x1") === rubberbandEl.getAttribute("x2") &&
-            rubberbandEl.getAttribute("y1") === rubberbandEl.getAttribute("y2")) {
+        // rubberbandEl = document.querySelector("#gc-rubberband line");
+        // console.log("rubberbandEl", rubberbandEl);
+        // if (document.querySelector("#gc-rubberband line").getAttribute("x1") === document.querySelector("#gc-rubberband line").getAttribute("x2") &&
+        //     document.querySelector("#gc-rubberband line").getAttribute("y1") === document.querySelector("#gc-rubberband line").getAttribute("y2")) {
+
+            // debugger;
+            // var rubberbandEl = document.querySelector("#gc-rubberband line");
+            // console.log("x1", document.querySelector("#gc-rubberband line").getAttribute("x1"));
+            // console.log("x2", document.querySelector("#gc-rubberband line").getAttribute("x2"));
+            // console.log("y1", document.querySelector("#gc-rubberband line").getAttribute("y1"));
+            // console.log("y2", document.querySelector("#gc-rubberband line").getAttribute("y2"));
 
             var birdPath = trajectoryEl.getAttribute("d"),
                 gcBirdFlyAnimationDuration = 2000;
@@ -151,9 +169,10 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
             setTimeout(function() {
                 scaffoldContainer.classList.remove("hidden");
             }, gcBirdFlyAnimationDuration);
-        } else {
-            bird.dispatchEvent(new Event("mouseup"));
-        }
+        // } else {
+        //     console.log("dispatchEvent");
+        //     bird.dispatchEvent(new Event("mouseup"));
+        // }
     });
 
     // reset activity when student clicks "Fly again?"
@@ -168,6 +187,17 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
         creditsContainer.classList.remove("hidden");
     });
 });
+
+function initializeSvg(svg, ground) {
+    var svgWidth = 1240;
+    if (window.innerWidth < 1240) {
+        svgWidth = window.innerWidth - 200;
+    }
+
+    svg.setAttribute("width", svgWidth);
+    svg.setAttribute("viewBox", `0 0 ${svgWidth} 300`);
+    ground.setAttribute("width", svgWidth);
+}
 
 function initializeBird(bird, duration) {
     bird.style.animationName = "initializeBird";
