@@ -31,12 +31,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
         event.preventDefault();
         isDragging = true;
     });
-    bird.addEventListener("click", function (event) {
-        console.log("no rly");
-    });
     // catch-all handler for resetting the game state
     bird.addEventListener("mouseup", function (event) {
-        console.log('orly');
         event.preventDefault();
         if (!scaffoldContainer.classList.contains("hidden")) {
             return;
