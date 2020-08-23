@@ -152,10 +152,11 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
             snappingSlingshot.style.strokeDasharray = "200";
             snappingSlingshot.style.strokeDashoffset = "0";
             snappingSlingshot.style.animation = "retractSlingshot 1s linear forwards";
-            debugger;
+            // debugger;
 
             // Developer's Note:
             // It's pretty easy to see the bug here.
+            // Uncomment the `debugger`, run `npm run build` in Terminal, and have `node server.js` running.
             // In your browser's console, print 'rubberbandEl' and then print 'snappingSlingshot.'
             // 'rubberbandEl' (printed, and visually) contains the pulled slingshot values
             // 'snappingSlingshot' contains x1===x2 and y1===y2
