@@ -29,7 +29,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
     var svgWidth = parseInt(svg.getAttribute("width"), 10), svgHeight = parseInt(svg.getAttribute("height"), 10);
     // toggle bird/slingshot drag event on mousedown/mouseup
     bird.addEventListener("mousedown", function (event) {
-        event.preventDefault();
         isDragging = true;
     });
     // main slingshot dragging logic
@@ -37,7 +36,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
         if (!isDragging) {
             return;
         }
-        event.preventDefault();
         // get bird (x, y) position
         var x = event.offsetX, y = event.offsetY;
         // allow player to move the bird within pre-defined (x, y) bounds
@@ -61,6 +59,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 x2 = x1;
                 y2 = y1;
             }
+            // mouse is too close to the slingshot
             if (slingshotLength > 30) {
                 drawTrajectory(trajectoryEl, x0, y0, x1, y1, x2, y2);
             }

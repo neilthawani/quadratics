@@ -43,8 +43,6 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
 
     // toggle bird/slingshot drag event on mousedown/mouseup
     bird.addEventListener("mousedown", function(event: MouseEvent) {
-        event.preventDefault();
-
         isDragging = true;
     });
 
@@ -53,8 +51,6 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
         if (!isDragging) {
             return;
         }
-
-        event.preventDefault();
 
         // get bird (x, y) position
         var x = event.offsetX,
@@ -103,6 +99,7 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
                 y2 = y1;
             }
 
+            // mouse is too close to the slingshot
             if (slingshotLength > 30) {
                 drawTrajectory(trajectoryEl,
                           x0, y0,
