@@ -171,6 +171,8 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
             // set cx, cy to 0 so the bird can follow the trajectory path relative to the svg
             bird.setAttribute("cx", "0");
             bird.setAttribute("cy", "0");
+
+            isDragging = false;
         }
 
         var fly = function() {
