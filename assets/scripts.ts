@@ -37,28 +37,6 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
     var svgWidth = <number><unknown>svg.getAttribute("width"),
         svgHeight = <number><unknown>svg.getAttribute("height");
 
-    bird.addEventListener("focus", function(event: MouseEvent) {
-        console.log("focus");
-    });
-    bird.addEventListener("blur", function(event: MouseEvent) {
-        console.log("blur");
-    });
-    bird.addEventListener("focusin", function(event: MouseEvent) {
-        console.log("focusin");
-    });
-    bird.addEventListener("focusout", function(event: MouseEvent) {
-        console.log("focusout");
-    });
-    bird.addEventListener("dragstart", function(event: MouseEvent) {
-        console.log("dragstart");
-    });
-    bird.addEventListener("drag", function(event: MouseEvent) {
-        console.log("drag");
-    });
-    bird.addEventListener("dragend", function(event: MouseEvent) {
-        console.log("dragend");
-    });
-
     // toggle bird/slingshot drag event on mousedown/mouseup
     bird.addEventListener("mousedown", function(event: MouseEvent) {
         event.preventDefault();
