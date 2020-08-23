@@ -89,9 +89,30 @@ document.addEventListener("DOMContentLoaded", function (event) {
         }
         event.preventDefault();
         var birdPath = trajectoryEl.getAttribute("d"), gcBirdFlyAnimationDuration = trajectoryEl.getTotalLength();
+        function snapSlingshot() {
+            return __awaiter(this, void 0, void 0, function* () {
+                var snappingSlingshot = rubberbandEl.parentElement.appendChild(document.createElement("line"));
+                snappingSlingshot.setAttribute("d", `M${rubberbandEl.getAttribute("x1")},${rubberbandEl.getAttribute("y1")} L${rubberbandElx2},${rubberbandEly2}`);
+                snappingSlingshot.style.strokeDasharray = "200";
+                snappingSlingshot.style.strokeDashoffset = "0";
+                snappingSlingshot.style.animation = "retractSlingshot 1s linear forwards";
+                debugger;
+                // Developer's Note:
+                // It's pretty easy to see the bug here.
+                // In your browser's console, print 'rubberbandEl' and then print 'snappingSlingshot.'
+                // 'rubberbandEl' (printed, and visually) contains the pulled slingshot values
+                // 'snappingSlingshot' contains x1===x2 and y1===y2
+                // After this is resolved, add the following to styles.css near the rubberbandEl styling:
+                // @keyframes retractSlingshot {
+                //   to {
+                //     stroke-dashoffset: 200;
+                //   }
+                // }
+            });
+        }
         function prepareToFly() {
             return __awaiter(this, void 0, void 0, function* () {
-                // send retracted slingshot back to original position
+                // send slingshot back to original position
                 rubberbandEl.setAttribute("x2", rubberbandElx2);
                 rubberbandEl.setAttribute("y2", rubberbandEly2);
                 // set cx, cy to 0 so the bird can follow the trajectory path relative to the svg
@@ -107,7 +128,9 @@ document.addEventListener("DOMContentLoaded", function (event) {
             birdGroup.style.animationFillMode = "forwards";
             birdGroup.style.offsetPath = `path('${birdPath}')`;
         };
-        prepareToFly().then(function () {
+        snapSlingshot()
+            .then(prepareToFly)
+            .then(function () {
             fly();
         }).then(function () {
             // cannot change 'display' attributes while animation is in progress

@@ -141,8 +141,30 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
         var birdPath = trajectoryEl.getAttribute("d"),
             gcBirdFlyAnimationDuration = trajectoryEl.getTotalLength();
 
+        async function snapSlingshot() {
+            var snappingSlingshot = rubberbandEl.parentElement.appendChild(document.createElement("line"));
+            snappingSlingshot.setAttribute("d", `M${rubberbandEl.getAttribute("x1")},${rubberbandEl.getAttribute("y1")} L${rubberbandElx2},${rubberbandEly2}`);
+            snappingSlingshot.style.strokeDasharray = "200";
+            snappingSlingshot.style.strokeDashoffset = "0";
+            snappingSlingshot.style.animation = "retractSlingshot 1s linear forwards";
+            debugger;
+
+            // Developer's Note:
+            // It's pretty easy to see the bug here.
+            // In your browser's console, print 'rubberbandEl' and then print 'snappingSlingshot.'
+            // 'rubberbandEl' (printed, and visually) contains the pulled slingshot values
+            // 'snappingSlingshot' contains x1===x2 and y1===y2
+
+            // After this is resolved, add the following to styles.css near the rubberbandEl styling:
+            // @keyframes retractSlingshot {
+            //   to {
+            //     stroke-dashoffset: 200;
+            //   }
+            // }
+        }
+
         async function prepareToFly() {
-            // send retracted slingshot back to original position
+            // send slingshot back to original position
             rubberbandEl.setAttribute("x2", rubberbandElx2);
             rubberbandEl.setAttribute("y2", rubberbandEly2);
 
@@ -160,7 +182,9 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
             birdGroup.style.offsetPath = `path('${birdPath}')`;
         }
 
-        prepareToFly().then(function() {
+        snapSlingshot()
+        .then(prepareToFly)
+        .then(function() {
             fly();
         }).then(function() {
             // cannot change 'display' attributes while animation is in progress
@@ -235,8 +259,8 @@ function findThirdPoint(predictedWidth: number, x0: number, y0: number, x1: numb
         return;
     }
 
-    var x2 = x2 || ((y2 - y0) * (x1 - x0)) / (y1 - y0) + x0
-    var y2 = y2 || ((y1 - y0) / (x1 - x0)) * (x2 - x0) + y0
+    var x2 = x2 || ((y2 - y0) * (x1 - x0)) / (y1 - y0) + x0;
+    var y2 = y2 || ((y1 - y0) / (x1 - x0)) * (x2 - x0) + y0;
 
     return [x2, y2];
 }
@@ -247,7 +271,7 @@ function findThirdX(x0: number, y0: number, x1: number, y1: number, y2: number) 
         return;
     }
 
-    var x2 = ((y2 - y0) * (x1 - x0)) / (y1 - y0) + x0
+    var x2 = ((y2 - y0) * (x1 - x0)) / (y1 - y0) + x0;
 
     return x2;
 }
