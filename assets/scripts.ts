@@ -164,7 +164,7 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
         }
 
         var birdObjHtml = event.path[0].outerHTML,
-            circleTag = birdObjHtml.substring(birdObjHtml.indexOf("<circle"), birdObjHtml.indexOf("</circle>")),
+            circleTag = birdObjHtml.substring(birdObjHtml.indexOf("<circle>"), birdObjHtml.indexOf("</circle>")),
             cxIs0 = circleTag.includes('cx="0"'),
             cyIs0 = circleTag.includes('cx="0"'),
             birdPath = trajectoryEl.getAttribute("d");
