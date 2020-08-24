@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     initializeSvg(svg, ground);
     initializeBird(bird, 1000);
     var svgWidth = parseInt(svg.getAttribute("width"), 10), svgHeight = parseInt(svg.getAttribute("height"), 10);
-    // toggle bird/slingshot drag event on mousedown/mouseup
+    // toggle bird/slingshot drag state on mousedown
     bird.addEventListener("mousedown", function (event) {
         isDragging = true;
     });
