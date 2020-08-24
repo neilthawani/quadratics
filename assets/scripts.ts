@@ -8,8 +8,7 @@ interface MouseEvent {
 }
 
 // mouse range of motion
-// circle:r / 2 = 12 / 2 = 6
-const birdRadius = 12;
+const birdRadius = 12; // circle:r
 const xMin = -birdRadius / 2;
 const xMax = 138 + birdRadius / 2; // gc-bird-obj:cx + 6
 const yMin = -birdRadius / 2;
