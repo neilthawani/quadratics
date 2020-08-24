@@ -9,10 +9,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 // mouse range of motion
-const xMin = -12;
-const xMax = 150; // gc-bird-obj:cx + 12
-const yMin = -12;
-const yMax = 300 + 12; // svgHeight
+// circle:r / 2 = 12 / 2 = 6
+const birdRadius = 12;
+const xMin = -birdRadius / 2;
+const xMax = 138 + birdRadius / 2; // gc-bird-obj:cx + 6
+const yMin = -birdRadius / 2;
+const yMax = 300 + birdRadius / 2; // svgHeight + 6
 document.addEventListener("DOMContentLoaded", function (event) {
     // define query selectors, get related attributes
     var svg = document.getElementById("game-canvas");
@@ -47,25 +49,22 @@ document.addEventListener("DOMContentLoaded", function (event) {
             this.setAttribute("cy", mouseY);
             rubberbandEl.setAttribute("x2", mouseX);
             rubberbandEl.setAttribute("y2", mouseY);
+            var rubberbandInitialX = parseInt(rubberbandEl.getAttribute("x1"), 10), rubberbandInitialY = parseInt(rubberbandEl.getAttribute("y1"), 10);
             // (x0, y0): ball/mouse coords
             // (x1, y1): bezier trajectory coords, based on slingshot angle
             // (x2, y2): predicted target
             // upward-facing slingshot, draw arc
-            var x0 = x, y0 = y, slingshotLength = Math.sqrt(Math.pow((initialX - x), 2) + Math.pow((initialY - y), 2)), calculatedX2 = (slingshotLength / initialX) * svgWidth, x2 = calculatedX2 < svgWidth ? calculatedX2 : svgWidth, y2 = yMax - parseInt(ground.getAttribute("height"), 10), [x1, y1] = findThirdPoint(x2, x0, y0, parseInt(rubberbandEl.getAttribute("x1"), 10), parseInt(rubberbandEl.getAttribute("y1"), 10));
+            var x0 = x, y0 = y, slingshotXLength = Math.abs(rubberbandInitialX - x), slingshotYLength = Math.abs(rubberbandInitialY - y), x2 = (rubberbandInitialX - slingshotXLength) + (slingshotXLength / rubberbandInitialX) * svgWidth, y2 = yMax - parseInt(ground.getAttribute("height"), 10), x1 = (rubberbandInitialX - slingshotXLength) + (x2 - x0) / 2, y1 = (-svgHeight + birdRadius) * (slingshotYLength / (300 - rubberbandInitialY));
             // downward-facing slingshot, draw straight line
             if (y0 < parseInt(rubberbandEl.getAttribute("y1"), 10)) {
                 y1 = yMax - parseInt(ground.getAttribute("height"), 10);
-                x1 = findThirdX(x0, y0, parseInt(rubberbandEl.getAttribute("x1"), 10), parseInt(rubberbandEl.getAttribute("y1"), 10), y1);
-                x2 = x1;
+                x1 = ((y1 - y0) * (parseInt(rubberbandEl.getAttribute("x1"), 10) - x0)) /
+                    (parseInt(rubberbandEl.getAttribute("y1"), 10) - y0) +
+                    x0,
+                    x2 = x1;
                 y2 = y1;
             }
-            // mouse is too close to the slingshot
-            if (slingshotLength > 30) {
-                drawTrajectory(trajectoryEl, x0, y0, x1, y1, x2, y2);
-            }
-            else if (slingshotLength <= 30) {
-                drawTrajectory(trajectoryEl, 0, 0, 0, 0, 0, 0);
-            }
+            drawTrajectory(trajectoryEl, x0, y0, x1, y1, x2, y2);
         }
         else {
             resetGameState();
@@ -149,7 +148,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
 function initializeSvg(svg, ground) {
     var svgWidth = 1240;
     if (window.outerWidth < 1240) {
-        svgWidth = window.outerWidth - 16;
+        svgWidth = window.outerWidth - 16; // body { -webkit-margin: 8px; }
     }
     svg.setAttribute("width", svgWidth);
     svg.setAttribute("viewBox", `0 0 ${svgWidth} 300`);
@@ -181,25 +180,6 @@ function drawTrajectory(el, x0, y0, x1, y1, x2, y2) {
     }
     // upward-facing slingshot, draw arc
     el.setAttribute("d", `M${x0},${y0} Q${x1},${y1} ${x2},${y2}`);
-}
-function findThirdPoint(predictedWidth, x0, y0, x1, y1, x2, y2) {
-    var x2 = x2 || predictedWidth / 2;
-    var y2 = y2 || 0;
-    if (x0 === x1) {
-        throw new Error("Divide by zero (same input x coords)");
-        return;
-    }
-    var x2 = x2 || ((y2 - y0) * (x1 - x0)) / (y1 - y0) + x0;
-    var y2 = y2 || ((y1 - y0) / (x1 - x0)) * (x2 - x0) + y0;
-    return [x2, y2];
-}
-function findThirdX(x0, y0, x1, y1, y2) {
-    if (x0 === x1) {
-        throw new Error("Divide by zero (same input x coords)");
-        return;
-    }
-    var x2 = ((y2 - y0) * (x1 - x0)) / (y1 - y0) + x0;
-    return x2;
 }
 
 },{}]},{},[1]);
