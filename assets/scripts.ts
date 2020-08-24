@@ -26,8 +26,8 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
         initialY = parseInt(bird.getAttribute("cy"), 10);
 
     var rubberbandEl = <SVGElement>document.querySelector("#gc-rubberband line"),
-        rubberbandElx2 = rubberbandEl.getAttribute("x2"),
-        rubberbandEly2 = rubberbandEl.getAttribute("y2");
+        rubberbandInitialX = parseInt(rubberbandEl.getAttribute("x1"), 10),
+        rubberbandInitialY = parseInt(rubberbandEl.getAttribute("y2"), 10);
     var trajectoryEl = <SVGPathElement>document.querySelector("#gc-trajectory path");
 
     var scaffoldContainer = document.getElementsByClassName("scaffold-container")[0];
@@ -72,9 +72,6 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
             rubberbandEl.setAttribute("x2", mouseX)
             rubberbandEl.setAttribute("y2", mouseY);
 
-            var rubberbandInitialX = parseInt(rubberbandEl.getAttribute("x1"), 10),
-                rubberbandInitialY = parseInt(rubberbandEl.getAttribute("y1"), 10);
-
             // (x0, y0): ball/mouse coords
             // (x1, y1): bezier trajectory coords, based on slingshot angle
             // (x2, y2): predicted target
@@ -90,11 +87,9 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
                 y1 = (-svgHeight + birdRadius) * (slingshotYLength / (300 - rubberbandInitialY));
 
             // downward-facing slingshot, draw straight line
-            if (y0 < parseInt(rubberbandEl.getAttribute("y1"), 10)) {
+            if (y0 < rubberbandInitialY) {
                 y1 = yMax - parseInt(ground.getAttribute("height"), 10);
-                x1 = ((y1 - y0) * (parseInt(rubberbandEl.getAttribute("x1"), 10) - x0)) /
-                      (parseInt(rubberbandEl.getAttribute("y1"), 10) - y0) +
-                      x0,
+                x1 = ((y1 - y0) * (rubberbandInitialX - x0)) / (rubberbandInitialY - y0) + x0,
                 x2 = x1;
                 y2 = y1;
             }
@@ -110,11 +105,13 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
 
     // let the bird fly
     svg.addEventListener("click", function(event: MouseEvent) {
-        var slingshotPulled = (parseInt(rubberbandEl.getAttribute("x1"), 10) !==
-                              parseInt(rubberbandEl.getAttribute("x2"), 10)) &&
-                              (parseInt(rubberbandEl.getAttribute("y1"), 10) !==
-                              parseInt(rubberbandEl.getAttribute("y2"), 10)),
-            birdPath = trajectoryEl.getAttribute("d"),
+        var rubberbandInitialX = parseInt(rubberbandEl.getAttribute("x1"), 10),
+            rubberbandInitialY = parseInt(rubberbandEl.getAttribute("y1"), 10),
+            rubberbandMouseX = parseInt(rubberbandEl.getAttribute("x2"), 10),
+            rubberbandMouseY = parseInt(rubberbandEl.getAttribute("y2"), 10);
+
+        var slingshotPulled = (rubberbandInitialX !== rubberbandMouseX) &&
+                              (rubberbandInitialY !== rubberbandMouseY),
             gcBirdFlyAnimationDuration = trajectoryEl.getTotalLength();
 
         if (!isDragging || !slingshotPulled || !gcBirdFlyAnimationDuration) {
@@ -127,7 +124,7 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
             birdGroup.style.animationTimingFunction = "ease-out";
             birdGroup.style.animationIterationCount = "1";
             birdGroup.style.animationFillMode = "forwards";
-            birdGroup.style.offsetPath = `path('${birdPath}')`;
+            birdGroup.style.offsetPath = `path('${trajectoryEl.getAttribute("d")}')`;
         }
 
         prepareToFly()
@@ -143,8 +140,8 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
 
     async function prepareToFly() {
         // send slingshot back to original position
-        rubberbandEl.setAttribute("x2", rubberbandElx2);
-        rubberbandEl.setAttribute("y2", rubberbandEly2);
+        rubberbandEl.setAttribute("x2", rubberbandInitialX.toString());
+        rubberbandEl.setAttribute("y2", rubberbandInitialY.toString());
 
         // set cx, cy to 0 so the bird can follow the trajectory path relative to the svg
         bird.setAttribute("cx", "0");
@@ -161,12 +158,11 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
         var birdObjHtml = event.path[0].outerHTML,
             circleTag = birdObjHtml.substring(birdObjHtml.indexOf("<circle>"), birdObjHtml.indexOf("</circle>")),
             cxIs0 = circleTag.includes('cx="0"'),
-            cyIs0 = circleTag.includes('cx="0"'),
-            birdPath = trajectoryEl.getAttribute("d");
+            cyIs0 = circleTag.includes('cx="0"');
 
         if (!(cxIs0 && cyIs0)) {
             prepareToFly();
-            birdGroup.style.offsetPath = `path('${birdPath}')`;
+            birdGroup.style.offsetPath = `path('${trajectoryEl.getAttribute("d")}')`;
         }
     });
 
@@ -195,7 +191,7 @@ document.addEventListener("DOMContentLoaded", function(event: MouseEvent) { // D
         birdGroup.style.offsetPath = "";
         resetSpritePosition(bird, {"cx": initialX}, {"cy": initialY});
 
-        resetSpritePosition(rubberbandEl, {"x2": rubberbandEl.getAttribute("x1")}, {"y2": rubberbandEl.getAttribute("y1")})
+        resetSpritePosition(rubberbandEl, {"x2": rubberbandInitialX}, {"y2": rubberbandInitialY})
 
         drawTrajectory(trajectoryEl, 0, 0, 0, 0, 0, 0);
 
