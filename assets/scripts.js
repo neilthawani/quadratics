@@ -74,12 +74,74 @@ document.addEventListener("DOMContentLoaded", function (event) {
             return;
         }
         var fly = function () {
+            var slingshotYLength = Math.abs(rubberbandInitialY - rubberbandMouseY);
+            var trajectoryPath = trajectoryEl.getAttribute("d");
+            var pathLength = trajectoryEl.getTotalLength();
+            var pointArray = [];
+            for (var i = 0; i < Math.ceil(pathLength); i++) {
+                var coords = trajectoryEl.getPointAtLength(i);
+                pointArray.push({ x: coords.x, y: coords.y });
+            }
+            var finalCoords = trajectoryEl.getPointAtLength(pathLength);
+            pointArray.push({ x: finalCoords.x, y: finalCoords.y });
+            var birdPathArray = [{
+                    x: pointArray[0].x,
+                    y: pointArray[0].y
+                }];
+            var i = 0;
+            var j = 0;
+            for (var index = 0; index < pointArray.length; index++) {
+                var nextCoordsIndex = 0;
+                if (index < pointArray.length / 2) {
+                    // console.log("lt");
+                    nextCoordsIndex = pointArray.findIndex((item) => {
+                        // console.log("item.y", item.y, "((rubberbandMouseY - slingshotYLength) - (10 * i++))", ((rubberbandMouseY - slingshotYLength) - (10 * i)));
+                        // return item.y <= birdPathArray[length - 1].y - ((rubberbandMouseY - slingshotYLength) - (10 * i));
+                        return item.y <= birdPathArray[birdPathArray.length - 1].y - (10 * i);
+                    });
+                    // console.log("first half, nextCoords", nextCoordsIndex, pointArray[nextCoordsIndex]);
+                    if (nextCoordsIndex === -1) {
+                        // console.log("birdPathArray", birdPathArray);
+                        continue;
+                    }
+                    i++;
+                    index = nextCoordsIndex + 1;
+                    // console.log("index i", i);
+                }
+                else if (index > pointArray.length / 2) {
+                    // console.log("gt");
+                    nextCoordsIndex = pointArray.findIndex((item) => {
+                        // return item.y >= ((rubberbandMouseY - slingshotYLength) + (10 * j));
+                        return item.y >= birdPathArray[birdPathArray.length - 1].y + (10 * j);
+                    });
+                    console.log("second half, nextCoords", nextCoordsIndex);
+                    console.log("pointArray[nextCoordsIndex].y", pointArray[nextCoordsIndex].y, "pointArray[pointArray.length - 1].y", pointArray[pointArray.length - 1].y);
+                    if (pointArray[nextCoordsIndex].y === pointArray[pointArray.length - 1].y) {
+                        break;
+                    }
+                    j++;
+                    index = nextCoordsIndex + 1;
+                    // console.log("index j", j);
+                }
+                // console.log("index", index);
+                // console.log("nextCoords", nextCoords);
+                var pointArrayIndex = pointArray.indexOf(nextCoords);
+                // console.log("pointArrayIndex", pointArrayIndex);
+                var nextCoords = pointArray[nextCoordsIndex];
+                birdPathArray.push({
+                    x: nextCoords.x,
+                    y: nextCoords.y
+                });
+            }
+            // debugger;
+            var birdPath = `M${pointArray[0].x},${pointArray[0].y}`;
+            birdPath = birdPath.concat(` L${nextCoords.x},${nextCoords.y}`);
             birdGroup.style.animationName = "gcBirdFly";
             birdGroup.style.animationDuration = `${gcBirdFlyAnimationDuration}ms`;
             birdGroup.style.animationTimingFunction = "ease-out";
             birdGroup.style.animationIterationCount = "1";
             birdGroup.style.animationFillMode = "forwards";
-            birdGroup.style.offsetPath = `path('${trajectoryEl.getAttribute("d")}')`;
+            birdGroup.style.offsetPath = `path('${birdPath}')`;
         };
         prepareToFly()
             .then(fly)
